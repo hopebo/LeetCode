@@ -1,0 +1,105 @@
+/**
+ * Definition for an interval.
+ * struct Interval {
+ *     int start;
+ *     int end;
+ *     Interval() : start(0), end(0) {}
+ *     Interval(int s, int e) : start(s), end(e) {}
+ * };
+ */
+class Solution {
+public:
+    vector<Interval> insert(vector<Interval>& intervals, Interval newInterval) {
+        if (intervals.empty())
+        {
+            intervals.push_back(newInterval);
+            return intervals;
+        }
+        vector<Interval> ans;
+        bool s_in = false, e_in = false;
+        int s_pos = site(intervals, newInterval.start, s_in);
+        int e_pos = site(intervals, newInterval.end, e_in);
+        int size = intervals.size();
+        if (e_pos == -1)
+        {
+            ans.push_back(newInterval);
+            duplicate(ans,intervals,0,size-1);
+            return ans;
+        }
+        if (s_pos == size)
+        {
+            duplicate(ans,intervals,0,size-1);
+            ans.push_back(newInterval);
+            return ans;
+        }
+        int over_s, over_e;
+        if (!s_in)
+            over_s = newInterval.start;
+        else
+            over_s = intervals[s_pos].start;
+        if (!e_in)
+            over_e = newInterval.end;
+        else
+            over_e = intervals[e_pos].end;
+        Interval over_lap(over_s,over_e);
+        if(s_in && e_in || s_in && !e_in)
+        {
+            duplicate(ans,intervals,0,s_pos-1);
+            ans.push_back(over_lap);
+            duplicate(ans,intervals,e_pos+1,size-1);
+        }
+        else if(!s_in && !e_in || !s_in && e_in)
+        {
+            duplicate(ans,intervals,0,s_pos);
+            ans.push_back(over_lap);
+            duplicate(ans,intervals,e_pos+1,size-1);
+        }
+        return ans;
+    }
+    void duplicate(vector<Interval>& ans, vector<Interval>& intervals, int begin, int end)
+    {
+        for(int i = begin; i <= end;i++)
+            ans.push_back(intervals[i]);
+        return;
+    }
+    int site(vector<Interval>& intervals, int num, bool& inner)
+    {
+        if(num < intervals[0].start)
+            return -1;
+        int size = intervals.size();
+        if(num > intervals[size-1].end)
+            return size;
+        int low = 0, high = size-1;
+        while(low < high-1)
+        {
+            int mid = (low+high)/2;
+            if (num >= intervals[mid].start && num <= intervals[mid].end)
+            {
+                inner = true;
+                return mid;
+            }
+            if (num < intervals[mid].start)
+            {
+                high = mid;
+            }
+            else if (num > intervals[mid].end)
+            {
+                low = mid;
+            }
+        }
+        if (num >= intervals[low].start && num <= intervals[low].end)
+        {
+            inner = true;
+            return low;
+        }
+        if (num >= intervals[high].start && num <= intervals[high].end)
+        {
+            inner = true;
+            return high;
+        }
+        if (num > intervals[low].end && num < intervals[high].start)
+        {
+            return low;
+        }
+    }
+};
