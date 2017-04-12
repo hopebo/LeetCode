@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        int sum = 1;
+        if (m == 1 || n==1)
+            return sum;
+        if (m < n)
+            swap(m,n);
+        sum = calculate(m,m+n-2)/calculate(1,n-1);
+        return sum;
+    }
+    double calculate(int min, int max)
+    {
+        double ans=1.0;
+        for(int i = min;i <= max;i++)
+            ans *= i;
+        return ans;
+    }
+};
