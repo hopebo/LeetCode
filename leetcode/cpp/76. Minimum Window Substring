@@ -1,0 +1,61 @@
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        map<char, int> target, current;
+		int t_size = t.size(), s_size = s.size();
+		for (int i = 0; i < t_size; i++)
+		{
+			if (target.count(t[i]))
+				target[t[i]]++;
+			else
+				target[t[i]] = 1;
+		}
+		int start = 0, end = -1, minlen = INT_MAX, num = 0;
+		string ans;
+		while (end < s_size - 1)
+		{
+			while (end < s_size - 1 && num < t_size)
+			{
+				end++;
+				if (target.count(s[end]))
+				{
+					if (current.count(s[end]))
+					{
+						if (current[s[end]] < target[s[end]])
+							num++;
+						current[s[end]]++;
+					}
+					else
+					{
+						current[s[end]] = 1;
+						num++;
+					}
+				}
+				else
+					continue;
+			}
+			if (num < t_size)
+				break;
+			while (start < end+1-t_size)
+			{
+				if (target.count(s[start]))
+				{
+					if (current[s[start]] == target[s[start]])
+						break;
+					else
+						current[s[start]]--;
+				}
+				start++;
+			}
+			if (end - start + 1 < minlen)
+			{
+				minlen = end - start + 1;
+				ans = s.substr(start, minlen);
+			}
+			current[s[start]]--;
+			num--;
+			start++;
+		}
+		return ans;
+    }
+};
