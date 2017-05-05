@@ -1,0 +1,56 @@
+class Solution {
+public:
+    vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
+        map<int, vector<vector<string>>> path;	//store all the possible transformation
+		int len = wordList.size();
+		wordList.push_back(beginWord);
+		path[len] = vector<vector<string>>(1, vector<string>(1, beginWord));
+		vector<int> index(1, len);
+		vector<int> find(len, 0);	//denotes states of whether word of index has been tranformed: 0=never, 1=have
+		while (!index.empty())
+		{
+			int index_size = index.size();
+			for (int i = 0; i < len; i++)
+			{
+				if (find[i] == 0)
+				{
+					for (int j = 0; j < index_size; j++)
+					{
+						if (ifchange(wordList[i], wordList[index[j]]))
+						{
+							if (!path.count(i))
+							{
+								path[i] = vector<vector<string>>();
+							}
+							for (int m = 0; m < path[index[j]].size(); m++)
+							{
+								vector<string> temp(path[index[j]][m]);
+								temp.push_back(wordList[i]);
+								path[i].push_back(temp);
+							}
+						}
+					}
+					if (path.count(i))
+					{
+						find[i] = 1;
+						index.push_back(i);
+						if (wordList[i] == endWord)
+							return path[i];
+					}
+				}
+			}
+			vector<int>::iterator it = index.begin();
+			for (int i = 0; i < index_size; i++, it++) {}
+			index.erase(index.begin(), it);
+		}
+		return vector<vector<string>>();
+	}
+	bool ifchange(string word1, string word2)
+	{
+		int num = 0;
+		for (int i = 0; i < word1.size(); i++)
+			if (word1[i] != word2[i])
+				num++;
+		return num == 1;
+    }
+};
