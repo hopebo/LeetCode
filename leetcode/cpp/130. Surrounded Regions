@@ -1,0 +1,47 @@
+class Solution {
+public:
+	void solve(vector<vector<char>>& board) {
+		if (board.empty())
+			return;
+		int num_row = board.size(), num_col = board[0].size();
+		int i, j;
+		for (i = 0; i < num_row; i++)
+		{
+			if (board[i][0] == 'O')
+				mark(board, i, 0, num_row, num_col);
+			if (num_col > 1 && board[i][num_col - 1] == 'O')
+				mark(board, i, num_col - 1, num_row, num_col);
+		}
+		for (j = 1; j < num_col - 1; j++)
+		{
+			if (board[0][j] == 'O')
+				mark(board, 0, j, num_row, num_col);
+			if (num_row > 1 && board[num_row - 1][j] == 'O')
+				mark(board, num_row - 1, j, num_row, num_col);
+		}
+		for (i = 0; i < num_row; i++)
+		{
+			for (j = 0; j < num_col; j++)
+			{
+				if (board[i][j] == '1')
+					board[i][j] = 'O';
+				else if (board[i][j] == 'O')
+					board[i][j] = 'X';
+			}
+		}
+		return;
+	}
+	void mark(vector<vector<char>>& board, int i, int j, int num_row, int num_col)
+	{
+		board[i][j] = '1';
+		if (i - 1 > 0 && board[i - 1][j] == 'O')
+			mark(board, i - 1, j, num_row, num_col);
+		if (i + 1 < num_row && board[i + 1][j] == 'O')
+			mark(board, i + 1, j, num_row, num_col);
+		if (j - 1 > 0 && board[i][j - 1] == 'O')
+			mark(board, i, j - 1, num_row, num_col);
+		if (j + 1 < num_col && board[i][j + 1] == 'O')
+			mark(board, i, j + 1, num_row, num_col);
+		return;
+	}
+};
