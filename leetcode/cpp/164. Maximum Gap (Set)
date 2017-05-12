@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int maximumGap(vector<int>& nums) {
+        int len = nums.size();
+		if (len < 2)
+			return 0;
+		set<int> number;
+		for (int i = 0; i < len; i++)
+		{
+			if (!number.count(nums[i]))
+				number.insert(nums[i]);
+		}
+		int maxGap = 0, prev = *number.begin(), p;
+		for (set<int>::iterator it = ++number.begin(); it != number.end(); it++)
+		{
+			p = *it;
+			maxGap = max(maxGap, p - prev);
+			prev = p;
+		}
+		return maxGap;
+    }
+};
