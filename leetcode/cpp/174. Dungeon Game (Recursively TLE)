@@ -1,0 +1,27 @@
+class Solution {
+private:
+	int globalminHP;
+public:
+    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+        if (dungeon.empty())
+			return -1;
+		globalminHP = INT_MIN;
+		solve(dungeon, 0, 0, min(dungeon[0][0], 0), dungeon[0][0], dungeon.size(), dungeon[0].size());
+		return abs(globalminHP) + 1;
+	}
+	void solve(vector<vector<int>>& dungeon, int x, int y, int minHP, int curHP, int row, int column)
+	{
+		if (minHP <= globalminHP)
+			return;
+		if (x == row - 1 && y == column - 1)
+		{
+			globalminHP = max(globalminHP, minHP);
+			return;
+		}
+		if (x < row - 1)
+			solve(dungeon, x + 1, y, min(minHP, curHP + dungeon[x + 1][y]), curHP + dungeon[x + 1][y], row, column);
+		if (y < column - 1)
+			solve(dungeon, x, y + 1, min(minHP, curHP + dungeon[x][y + 1]), curHP + dungeon[x][y + 1], row, column);
+		return;
+    }
+};
