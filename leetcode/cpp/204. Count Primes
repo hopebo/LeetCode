@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int countPrimes(int n) {
+        if (n <= 2)
+			return 0;
+		vector<bool> ifprime(n, false);
+		int count = 0;
+		for (int i = 2; i < n; i++)
+		{
+			if (ifprime[i] == false)
+			{
+			    count++;
+			    for (int j = i; i*static_cast<long long>(j) < n; j++)
+				    ifprime[i*j] = true;
+			}
+		}
+		return count;
+    }
+};
