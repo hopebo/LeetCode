@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<pair<int, int>>& prerequisites) {
+        if (numCourses == 0)
+			return vector<int>();
+		vector<int> course;
+		vector<vector<int>> matrix(numCourses, vector<int>(numCourses, 0));
+		vector<int> indegree(numCourses, 0);
+		for (int i = 0; i < prerequisites.size(); i++)
+		{
+			int cur = prerequisites[i].first;
+			int prev = prerequisites[i].second;
+			matrix[prev][cur] = 1;
+			indegree[cur]++;
+		}
+		vector<int> temp(indegree);
+		for (int i = 0; i < temp.size(); i++)
+		{
+			if (temp[i] == 0)
+				DFS(matrix, course, indegree, i);
+		}
+		return course.size() == numCourses ? course : vector<int>();
+	}
+	void DFS(vector<vector<int>>& matrix, vector<int>& course, vector<int>& indegree, int course_id)
+	{
+		course.push_back(course_id);
+		for (int j = 0; j < matrix[0].size(); j++)
+		{
+			if (matrix[course_id][j] == 1)
+			{
+				indegree[j]--;
+				if (indegree[j] == 0)
+					DFS(matrix, course, indegree, j);
+			}
+		}
+		return;
+    }
+};
