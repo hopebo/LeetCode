@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int len = nums.size();
+		if (len == 0)
+			return 0;
+		else if (len == 1)
+			return nums[0];
+		else
+		{
+			int rob_1 = 0, notrob_1 = nums[0], rob_2 = nums[1], notrob_2 = 0;
+			for (int i = 2; i < nums.size(); i++)
+			{
+				int temp = notrob_1;
+				notrob_1 = max(rob_1, notrob_1);
+				rob_1 = nums[i] + temp;
+				temp = notrob_2;
+				notrob_2 = max(rob_2, notrob_2);
+				rob_2 = nums[i] + temp;
+			}
+			return max(notrob_1, max(rob_2, notrob_2));
+		}
+    }
+};
