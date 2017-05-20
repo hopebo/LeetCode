@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int calculate(string s) {
+        if (s.empty())
+			return 0;
+		int curRes = 0, curSign = 1;
+		stack<int> previous;
+		for (int i = 0; i < s.size(); i++)
+		{
+			if (s[i] == ' ')
+				continue;
+			else if (s[i] == '+')
+				curSign = 1;
+			else if (s[i] == '-')
+				curSign = 0;
+			else if (s[i] >= '0' && s[i] <= '9')
+			{
+				int temp = int(s[i] - '0');
+				while (i < s.size()-1 && (s[i+1] == ' ' || (s[i+1] >= '0' && s[i+1] <= '9')))
+				{
+					if (s[i + 1] >= '0' && s[i + 1] <= '9')
+						temp = 10 * temp + int(s[i+1] - '0');
+					i++;
+				}
+				if (curSign == 1)
+					curRes += temp;
+				else
+					curRes -= temp;
+			}
+			else if (s[i] == '(')
+			{
+				previous.push(curRes);
+				previous.push(curSign);
+				curSign = 1;
+				curRes = 0;
+			}
+			else if (s[i] == ')')
+			{
+				curSign = previous.top();
+				previous.pop();
+				if (curSign == 1)
+					curRes = previous.top() + curRes;
+				else
+					curRes = previous.top() - curRes;
+				previous.pop();
+			}
+		}
+		return curRes;
+    }
+};
