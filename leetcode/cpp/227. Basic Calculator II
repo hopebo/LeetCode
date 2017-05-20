@@ -1,0 +1,62 @@
+int curRes = 0, curSign = 1;	//1,2,3,4分别代表+,-,*,/
+		stack<int> previous;
+		for (int i = 0; i < s.size(); i++)
+		{
+			if (s[i] == ' ');
+			else if (s[i] >= '0' && s[i] <= '9')
+			{
+				int temp = int(s[i] - '0');
+				while (i < s.size() - 1 && (s[i + 1] == ' ' || s[i + 1] >= '0' && s[i] <= '9'))
+				{
+					if (s[i + 1] >= '0' && s[i + 1] <= '9')
+						temp = temp * 10 + int(s[i + 1] - '0');
+					i++;
+				}
+				if (curSign == 3)
+					curRes *= temp;
+				else if (curSign == 4)
+					curRes /= temp;
+				else
+					curRes = temp;
+			}
+			else if (s[i] == '+' || s[i] == '-')
+			{
+				if (!previous.empty())
+				{
+					curSign = previous.top();
+					previous.pop();
+					if (curSign == 1)
+						curRes = previous.top() + curRes;
+					else if (curSign == 2)
+						curRes = previous.top() - curRes;
+					previous.pop();
+				}
+				if (s[i] == '+')
+					curSign = 1;
+				else
+					curSign = 2;
+				previous.push(curRes);
+				previous.push(curSign);
+			}
+			else if (s[i] == '*' || s[i] == '/')
+			{
+				if (s[i] == '*')
+					curSign = 3;
+				else
+					curSign = 4;
+			}
+			if (i == s.size() - 1)
+			{
+				while (!previous.empty())
+				{
+					curSign = previous.top();
+					previous.pop();
+					if (curSign == 1)
+						curRes = previous.top() + curRes;
+					else if (curSign == 2)
+						curRes = previous.top() - curRes;
+					previous.pop();
+				}
+			}
+		}
+		return curRes;
