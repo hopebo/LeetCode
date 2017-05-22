@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        if (n == 1)
+			return 1;
+		vector<int> nums(n, 1);
+		int pos2 = 0, pos3 = 0, pos5 = 0;
+		for (int i = 1; i < n; i++)
+		{
+			nums[i] = min(2 * nums[pos2], min(3 * nums[pos3], 5 * nums[pos5]));
+			if (nums[i] == 2 * nums[pos2])
+				pos2++;
+			if (nums[i] == 3 * nums[pos3])
+				pos3++;
+			if (nums[i] == 5 * nums[pos5])
+				pos5++;
+		}
+		return nums[n - 1];
+    }
+};
