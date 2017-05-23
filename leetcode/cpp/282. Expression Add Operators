@@ -1,0 +1,37 @@
+class Solution {
+public:
+    vector<string> addOperators(string num, int target) {
+        vector<string> res;
+		if (num.empty())
+			return res;
+		string path = "";
+		solve(res, num, target, path, 0, 0, 0);
+		return res;
+	}
+	void solve(vector<string>& res, string num, int target, string path, int begin, long long result, long long prev)
+	{
+		if (begin == num.size())
+		{
+			if (result == target)
+				res.push_back(path);
+			else
+				return;
+		}
+		for (int i = 1; i <= num.size() - begin; i++)
+		{
+			string digit = num.substr(begin, i);
+			long long cur = stoll(digit);
+			if (begin == 0)
+				solve(res, num, target, path + digit, begin + i, cur, cur);
+			else
+			{
+				solve(res, num, target, path + "+" + digit, begin + i, result + cur, cur);
+				solve(res, num, target, path + "-" + digit, begin + i, result - cur, -cur);
+				solve(res, num, target, path + "*" + digit, begin + i, result - prev + prev * cur, prev*cur);
+			}
+			if (cur == 0)
+				break;
+		}
+		return;
+    }
+};
