@@ -1,0 +1,38 @@
+class Solution {
+public:
+    void gameOfLife(vector<vector<int>>& board) {
+        if (board.empty())
+			return;
+		int m = board.size(), n = board[0].size();
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				int alive = count(board, i, j, m, n);
+				if (board[i][j] == 0 && alive == 3)
+					board[i][j] = 2;
+				if (board[i][j] == 1 && (alive == 2 || alive == 3))
+					board[i][j] = 3;
+			}
+		}
+		for (int i = 0; i < m; i++)
+			for (int j = 0; j < n; j++)
+				board[i][j] >>= 1;
+		return;
+	}
+	int count(vector<vector<int>>& board, int row, int col, int m, int n)
+	{
+		int num = 0;
+		for (int i = max(0, row - 1); i <= min(m - 1, row + 1); i++)
+		{
+			for (int j = max(0, col - 1); j <= min(n - 1, col + 1); j++)
+			{
+				if (i == row && j == col)
+					continue;
+				if (board[i][j] & 1)
+					num++;
+			}
+		}
+		return num;
+    }
+};
