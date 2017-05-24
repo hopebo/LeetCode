@@ -1,0 +1,56 @@
+class NumArray {
+private:
+	vector<int> BIT;
+	vector<int> num;
+	int len;
+public:
+	NumArray(vector<int> nums) {
+		num.assign(nums.begin(), nums.end());
+		len = nums.size();
+		for (int i = 0; i < len + 1; i++)
+			BIT.push_back(0);
+		for (int i = 0; i < len; i++)
+			init(i, nums[i]);
+	}
+
+	void init(int i, int val)
+	{
+		i++;
+		while (i <= len)
+		{
+			BIT[i] += val;
+			i += (i & -i);
+		}
+		return;
+	}
+
+	void update(int i, int val) {
+		int diff = val - num[i];
+		num[i] = val;
+		init(i, diff);
+		return;
+	}
+
+	int getsum(int i)
+	{
+		int sum = 0;
+		i++;
+		while (i > 0)
+		{
+			sum += BIT[i];
+			i -= (i & -i);
+		}
+		return sum;
+	}
+
+	int sumRange(int i, int j) {
+		return getsum(j) - getsum(i - 1);
+	}
+};
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.update(i,val);
+ * int param_2 = obj.sumRange(i,j);
+ */
