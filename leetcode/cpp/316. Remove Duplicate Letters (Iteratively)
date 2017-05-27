@@ -1,0 +1,38 @@
+class Solution {
+public:
+    string removeDuplicateLetters(string s) {
+        int len = s.size();
+		string res = "";
+		map<char, int> dic;
+		for (int i = 0; i < len; i++)
+			dic[s[i]] = i;
+		int begin = 0, end = findMinLastPos(dic);
+		while (!dic.empty())
+		{
+			char temp = char('z' + 1);
+			for (int i = begin; i <= end; i++)
+			{
+				if (dic.count(s[i]) && s[i] < temp)
+				{
+					temp = s[i];
+					begin = i + 1;
+				}
+			}
+			res.push_back(temp);
+			dic.erase(temp);
+			if (temp == s[end])
+				end = findMinLastPos(dic);
+		}
+		return res;
+	}
+	int findMinLastPos(map<char, int>& dic)
+	{
+		int pos = INT_MAX;
+		for (map<char, int>::iterator it = dic.begin(); it != dic.end(); it++)
+		{
+			if (it->second < pos)
+				pos = it->second;
+		}
+		return pos;
+    }
+};
