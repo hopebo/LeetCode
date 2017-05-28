@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        vector<int> nums(amount+1, INT_MAX);
+        nums[0] = 0;
+        for (int i = 1; i <= amount; i++)
+        {
+            for (int j = 0; j < coins.size(); j++)
+            {
+                if (i - coins[j] >= 0 && nums[i-coins[j]] < nums[i])
+                    nums[i] = nums[i-coins[j]];
+            }
+            if (nums[i] != INT_MAX)
+                nums[i]++;
+        }
+        return nums[amount] == INT_MAX ? -1 : nums[amount];
+    }
+};
