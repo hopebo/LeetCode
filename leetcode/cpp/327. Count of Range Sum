@@ -1,0 +1,28 @@
+if (nums.empty())
+			return 0;
+		int len = nums.size();
+		vector<long long> sum(len, nums[0]);
+		for (int i = 1; i < len; i++)
+			sum[i] = sum[i - 1] + nums[i];
+		int res = merge(sum, 0, len - 1, lower, upper);
+		return res;
+	}
+	int merge(vector<long long>& sum, int start, int end, int lower, int upper)
+	{
+		if (end - start == 0)
+			return sum[start] >= lower && sum[start] <= upper ? 1 : 0;
+		int mid = (start + end) / 2;
+		int count = merge(sum, start, mid, lower, upper) + merge(sum, mid + 1, end, lower, upper);
+		vector<long long> mergearray(end - start + 1, 0);
+		int i = start, j = mid + 1, left = mid + 1, right = mid + 1, index = 0;
+		for (; i <= mid; i++)
+		{
+			while (left <= end && sum[left] - sum[i] < lower)	left++;
+			while (right <= end && sum[right] - sum[i] <= upper)	right++;
+			while (j <= end && sum[j] < sum[i])		mergearray[index++] = sum[j++];
+			count += right - left;
+			mergearray[index++] = sum[i];
+		}
+		for (int m = 0; m < index; m++)
+			sum[start + m] = mergearray[m];
+		return count;
