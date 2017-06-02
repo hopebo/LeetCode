@@ -1,0 +1,25 @@
+class Solution {
+public:
+    string reverseVowels(string s) {
+        set<char> dic;
+		dic.insert('a');
+		dic.insert('e');
+		dic.insert('i');
+		dic.insert('o');
+		dic.insert('u');
+		string ans(s);
+		int i = 0, j = (int)ans.size() - 1;
+		while (i < j)
+		{
+			while (i < j && !dic.count(tolower(ans[i])))
+				i++;
+			while (i < j && !dic.count(tolower(ans[j])))
+				j--;
+			if (i < j)
+				swap(ans[i], ans[j]);
+			i++;
+			j--;
+		}
+		return ans;
+    }
+};
