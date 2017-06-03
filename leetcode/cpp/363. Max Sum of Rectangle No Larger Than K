@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int maxSumSubmatrix(vector<vector<int>>& matrix, int k) {
+        if (matrix.empty())
+			return 0;
+		int m = matrix.size(), n = matrix[0].size();
+		int maxSum = INT_MIN;
+		if (m > n)
+			swap(m, n);
+		for (int i = 0; i < m; i++)
+		{
+			vector<int> sum(n, 0);
+			for (int j = i; j < m; j++)
+			{
+				set<int> prev_sum;
+				prev_sum.insert(0);
+				int curSum = 0;
+				for (int h = 0; h < n; h++)
+				{
+					sum[h] += m == matrix.size() ? matrix[j][h] : matrix[h][j];
+					curSum += sum[h];
+					set<int>::iterator it = prev_sum.lower_bound(curSum - k);
+					if (it != prev_sum.end())
+						maxSum = max(maxSum, curSum - *it);
+					prev_sum.insert(curSum);
+				}
+			}
+		}
+		return maxSum;
+    }
+};
