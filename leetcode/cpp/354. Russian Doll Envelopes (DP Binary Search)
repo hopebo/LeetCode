@@ -1,0 +1,41 @@
+class Solution {
+public:
+	static bool cmp(pair<int, int>& compare1, pair<int, int>& compare2)
+	{
+		if (compare1.first < compare2.first)
+			return true;
+		else if (compare1.first == compare2.first)
+			return compare1.second > compare2.second;
+		else
+			return false;
+	}
+	int maxEnvelopes(vector<pair<int, int>>& envelopes) {
+		if (envelopes.empty())
+			return 0;
+		sort(envelopes.begin(), envelopes.end(), cmp);
+		int len = envelopes.size();
+		vector<int> dp(1, envelopes[0].second);
+		for (int i = 1; i < len; i++)
+		{
+			int low = 0, high = dp.size() - 1;
+			while (low < high)
+			{
+				int mid = ceil(((float)low + high) / 2);
+				if (envelopes[i].second > dp[mid])
+					low = mid;
+				else
+					high = mid - 1;
+			}
+			if (envelopes[i].second > dp[low])
+			{
+				if (low < dp.size() - 1)
+					dp[low + 1] = min(dp[low + 1], envelopes[i].second);
+				else
+					dp.push_back(envelopes[i].second);
+			}
+			else
+				dp[low] = min(dp[low], envelopes[i].second);
+		}
+		return dp.size();
+	}
+};
