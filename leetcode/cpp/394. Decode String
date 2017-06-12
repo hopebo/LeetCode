@@ -1,0 +1,40 @@
+class Solution {
+public:
+    string decodeString(string s) {
+        string ans = "";
+		if (s.empty())
+			return ans;
+		int i = 0, num = 0;
+		stack<int> count;
+		stack<string> prefix;
+		while (i < s.size())
+		{
+			if (s[i] >= '0' && s[i] <= '9')
+				num = 10 * num + int(s[i] - '0');
+			else if (s[i] == '[')
+			{
+				count.push(num);
+				prefix.push(ans);
+				num = 0;
+				ans = "";
+			}
+			else if (s[i] == ']')
+			{
+				ans = prefix.top() + repeat(ans, count.top());
+				prefix.pop();
+				count.pop();
+			}
+			else
+				ans.push_back(s[i]);
+			i++;
+		}
+		return ans;
+	}
+	string repeat(string word, int num)
+	{
+		string ans = "";
+		for (int i = 0; i < num; i++)
+			ans += word;
+		return ans;
+	}
+};
