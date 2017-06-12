@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<int> lexicalOrder(int n) {
+        if (n < 1)
+			return vector<int>();
+		vector<int> res;
+		for (int digit = 1; digit <= 9 && digit <= n; digit++)
+			solve(res, digit, n);
+		return res;
+	}
+	void solve(vector<int> &res, int num, int n)
+	{
+		if (num <= n)
+			res.push_back(num);
+		else
+			return;
+		for (int digit = 0; digit <= 9; digit++)
+		{
+			solve(res, 10 * num + digit, n);
+		}
+		return;
+	}
+};
