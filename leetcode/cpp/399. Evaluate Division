@@ -1,0 +1,49 @@
+class Solution {
+public:
+    vector<double> calcEquation(vector<pair<string, string>> equations, vector<double>& values, vector<pair<string, string>> queries) {
+        vector<double> res;
+		if (queries.empty())
+			return res;
+		map<string, map<string, double>> equa;
+		for (int i = 0; i < equations.size(); i++)
+		{
+			equa[equations[i].first][equations[i].second] = values[i];
+			equa[equations[i].second][equations[i].second] = 1.0;
+			if (values[i] != 0)
+			{
+				equa[equations[i].second][equations[i].first] = 1.0 / values[i];
+				equa[equations[i].first][equations[i].first] = 1.0;
+			}
+		}
+		for (int i = 0; i < queries.size(); i++)
+		{
+			set<string> record;
+			res.push_back(solve(equa, record, queries[i].first, queries[i].second));
+		}
+		return res;
+	}
+	double solve(map<string, map<string, double>>& equa, set<string>& record, string dividend, string divisor)
+	{
+		if (equa[dividend].count(divisor))
+			return equa[dividend][divisor];
+		if (dividend == divisor)
+			return -1.0;
+		record.insert(dividend);
+		for (map<string, double>::iterator it = equa[dividend].begin(); it != equa[dividend].end(); it++)
+		{
+			if (!record.count(it->first) && it->second != -1.0)
+			{
+				double res = solve(equa, record, it->first, divisor);
+				if (res != -1.0)
+				{
+					equa[dividend][divisor] = it->second * res;
+					if (equa[dividend][divisor] != 0)
+						equa[divisor][dividend] = 1.0 / equa[dividend][divisor];
+					return equa[dividend][divisor];
+				}
+			}
+		}
+		equa[dividend][divisor] = equa[divisor][dividend] = -1.0;
+		return equa[dividend][divisor];
+	}
+};
