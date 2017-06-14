@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<pair<int, int>> reconstructQueue(vector<pair<int, int>>& people) {
+        vector<pair<int, int>> res;
+		if (people.empty())
+			return res;
+		sort(people.begin(), people.end(), cmp);
+		for (int i = 0; i < people.size(); i++)
+		{
+			res.insert(res.begin() + people[i].second, people[i]);
+		}
+		return res;
+	}
+	static bool cmp(pair<int, int>& compare1, pair<int, int>& compare2)
+	{
+		if (compare1.first > compare2.first)
+			return true;
+		else if (compare1.first == compare2.first)
+			return compare1.second < compare2.second;
+		else
+			return false;
+    }
+};
