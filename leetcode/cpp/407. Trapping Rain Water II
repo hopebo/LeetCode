@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int trapRainWater(vector<vector<int>>& heightMap) {
+        if (heightMap.size() <= 2 || heightMap[0].size() <= 2)
+            return 0;
+        int row = heightMap.size(), col = heightMap[0].size();
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> que;
+        vector<vector<int>> visited(row, vector<int>(col, 0));
+        for (int i = 0; i < row; i++)
+        {
+            que.push(pair<int, int>(heightMap[i][0], i*col));
+            que.push(pair<int, int>(heightMap[i][col-1], (i+1)*col-1));
+            visited[i][0] = visited[i][col-1] = 1;
+        }
+        for (int j = 1; j < col-1; j++)
+        {
+            que.push(pair<int, int>(heightMap[0][j], j));
+            que.push(pair<int, int>(heightMap[row-1][j], (row-1)*col+j));
+            visited[0][j] = visited[row-1][j] = 1;
+        }
+        
+        int maxheight = INT_MIN, sum = 0;
+        int direction [][2] = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
+        while (!que.empty())
+        {
+            pair<int, int> cur = que.top();
+            que.pop();
+            int i = cur.second / col, j = cur.second % col;
+            maxheight = max(maxheight, cur.first);
+            for (auto dir : direction)
+            {
+                int ro = i + dir[0], co = j + dir[1];
+                if (ro < 0 || ro >= row || co < 0 || co >= col || visited[ro][co])  continue;
+                if (heightMap[ro][co] < maxheight)
+                    sum += maxheight - heightMap[ro][co];
+                que.push(pair<int, int>(heightMap[ro][co], ro*col+co));
+                visited[ro][co] = 1;
+            }
+        }
+        return sum;
+    }
+};
