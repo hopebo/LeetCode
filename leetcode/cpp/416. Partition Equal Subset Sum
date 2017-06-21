@@ -11,8 +11,8 @@ public:
         ifsum[0] = true;
         for (int i = 0; i < nums.size(); i++)
         {
-            for (int num = sum; num > 0; num--)
-                ifsum[num] = ifsum[num] || num-nums[i] >= 0 && ifsum[num-nums[i]];
+            for (int num = sum; num >= nums[i]; num--)
+                ifsum[num] = ifsum[num] || ifsum[num-nums[i]];
         }
         return ifsum[sum];
     }
