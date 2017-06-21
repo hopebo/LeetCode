@@ -1,0 +1,19 @@
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int sum = 0;
+        for (int i = 0; i < nums.size(); i++)
+            sum += nums[i];
+        if (sum % 2)
+            return false;
+        sum /= 2;
+        vector<bool> ifsum(sum+1, false);
+        ifsum[0] = true;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            for (int num = sum; num > 0; num--)
+                ifsum[num] = ifsum[num] || num-nums[i] >= 0 && ifsum[num-nums[i]];
+        }
+        return ifsum[sum];
+    }
+};
