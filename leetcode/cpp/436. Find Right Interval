@@ -1,0 +1,26 @@
+/**
+ * Definition for an interval.
+ * struct Interval {
+ *     int start;
+ *     int end;
+ *     Interval() : start(0), end(0) {}
+ *     Interval(int s, int e) : start(s), end(e) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> findRightInterval(vector<Interval>& intervals) {
+        int len = intervals.size();
+        vector<int> res(len, -1);
+        map<int, int> hash;
+        for (int i = 0; i < len; i++)
+            hash[intervals[i].start] = i;
+        for (int i = 0; i < len; i++)
+        {
+            map<int, int>::iterator it = hash.lower_bound(intervals[i].end);
+            if (it != hash.end())
+                res[i] = it->second;
+        }
+        return res;
+    }
+};
