@@ -1,0 +1,32 @@
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        int len = p.size(), start = 0, end = 0;
+        vector<int> res;
+        map<char, int> dic;
+        map<char, int> cur;
+        for (int i = 0; i < len; i++)
+            dic[p[i]]++;
+        for (; end < s.size(); end++)
+        {
+            char letter = s[end];
+            if (dic.count(letter))
+            {
+                cur[letter]++;
+                while (cur[letter] > dic[letter])
+                {
+                    cur[s[start]]--;
+                    start++;
+                }
+                if (end-start+1 == len)
+                    res.push_back(start);
+            }
+            else
+            {
+                cur.clear();
+                start = end+1;
+            }
+        }
+        return res;
+    }
+};
