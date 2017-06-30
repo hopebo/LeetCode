@@ -1,0 +1,35 @@
+class Solution {
+public:
+    bool makesquare(vector<int>& nums) {
+        int sum = 0;
+        for (int num : nums)
+            sum += num;
+        if (sum % 4 || sum == 0)
+            return false;
+        int target = sum / 4;
+        sort(nums.begin(), nums.end(), [](const int& compare1, const int& compare2){return compare1 > compare2;});
+        vector<int> length(4, 0);
+        return solve(length, nums, 0, target);
+    }
+    bool solve(vector<int>& length, vector<int>& nums, int index, int target)
+    {
+        if (index == nums.size())
+            return true;
+        for (int i = 0; i < 4; i++)
+        {
+            if (length[i] + nums[index] > target)
+                continue;
+            int j = 0;
+            for (; j < i; j++)
+                if (length[j] == length[i])
+                    break;
+            if (j < i)
+                continue;
+            length[i] += nums[index];
+            if (solve(length, nums, index+1, target))
+                return true;
+            length[i] -= nums[index];
+        }
+        return false;
+    }
+};
