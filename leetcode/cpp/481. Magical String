@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int magicalString(int n) {
+        if (n == 0)
+            return 0;
+        string str = "122";
+        int head = 2, res = 1;
+        while (str.size() < n)
+        {
+            if (str[head] == '1')
+                res++;
+            str = str.append(string(str[head++] == '1' ? 1 : 2, str.back() == '1' ? '2' : '1'));
+        }
+        while (head < n)
+            if (str[head++] == '1')
+                res++;
+        return res;
+    }
+};
