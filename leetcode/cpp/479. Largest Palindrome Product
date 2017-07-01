@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int largestPalindrome(int n) {
+        if (n == 1)	return 9;
+        int upperbound = pow(10, n) - 1, lowerbound = pow(10, n-1);
+        long long palindrome = (long long)upperbound * upperbound;
+        int firstHalf = palindrome / pow(10, n);
+        while (1) {
+            palindrome = create(to_string(firstHalf));
+            for (int i = upperbound; i >= lowerbound; i--)
+            {
+                if (palindrome / i > upperbound || (long long)i * i < palindrome)
+                    break;
+                if (palindrome % i == 0)
+                    return palindrome % 1337;
+            }
+            firstHalf--;
+        }
+    }
+    long long create(string firstHalf)
+    {
+        string result = firstHalf;
+        reverse(firstHalf.begin(), firstHalf.end());
+        return stoll(result+firstHalf);
+    }
+};
