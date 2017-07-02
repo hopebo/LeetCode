@@ -1,0 +1,16 @@
+class Solution {
+public:
+    vector<int> constructRectangle(int area) {
+        int width = floor(sqrt(area));
+        vector<int> res(2, 0);
+        for (; width > 0; width--)
+        {
+            if (area % width == 0)
+            {
+                res[0] = area / width;
+                res[1] = width;
+                return res;
+            }
+        }
+    }
+};
