@@ -1,0 +1,18 @@
+class Solution {
+public:
+    bool checkPerfectNumber(int num) {
+        int sum = 1;
+        int range = floor(sqrt(num));
+        for (int i = 2; i <= range; i++)
+        {
+            if (num % i == 0)
+            {
+                sum += i;
+                sum += num / i;
+            }
+        }
+        if (range*range == num)
+            sum -= range;
+        return sum == num;
+    }
+};
