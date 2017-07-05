@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int change(int amount, vector<int>& coins) {
+        vector<int> nums(amount+1, 0);
+        nums[0] = 1;
+        for (int i = 0; i < coins.size(); i++)
+        {
+            for (int n = 1; n <= amount; n++)
+            {
+                if (n - coins[i] >= 0)
+                    nums[n] += nums[n - coins[i]];
+            }
+        }
+        return nums[amount];
+    }
+};
