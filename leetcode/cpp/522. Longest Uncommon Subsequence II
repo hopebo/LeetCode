@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int findLUSlength(vector<string>& strs) {
+        if (strs.empty())
+            return -1;
+        sort(strs.begin(), strs.end(), [](string& str1, string& str2) {return str1.size() > str2.size();});
+        set<string> compare;
+        map<string, int> dic;
+        int start = 0, end = 1, len;
+        while (start < strs.size()) {
+            len = strs[start].size();
+            dic[strs[start]]++;
+            while (end < strs.size() && strs[end].size() == len)
+                dic[strs[end++]]++;
+            for (int i = start; i < end; i++)
+            {
+                bool flag = true;
+                for (set<string>::iterator it = compare.begin(); it != compare.end(); it++)
+                {
+                    if (isSubstring(strs[i], *it))
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (!flag)
+                    continue;
+                if (dic[strs[i]] == 1)
+                    return len;
+                else
+                    compare.insert(strs[i]);
+            }
+            start = end;
+            end++;
+            dic.clear();
+        }
+        return -1;
+    }
+    bool isSubstring(string word1, string word2) {
+        if (word1.empty())
+            return true;
+        int i = 0, j = 0;
+        for (; i < word1.size(); i++, j++)
+        {
+            while (j < word2.size() && word1[i] != word2[j])
+                j++;
+            if (j == word2.size())
+                return false;
+        }
+        return true;
+    }
+};
