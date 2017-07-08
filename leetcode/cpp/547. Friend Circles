@@ -1,0 +1,35 @@
+
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& M) {
+        int res = 0;
+        vector<bool> notCount(M.size(), true);
+        for (int i = 0; i < M.size(); i++)
+        {
+            if (notCount[i])
+            {
+                res++;
+                countCircle(M, notCount, i);
+            }
+        }
+        return res;
+    }
+    void countCircle(vector<vector<int>>& M, vector<bool>& notCount, int stuNumber) {
+        notCount[stuNumber] = false;
+        queue<int> student;
+        student.push(stuNumber);
+        while (!student.empty()) {
+            int i = student.front();
+            student.pop();
+            for (int j = 0; j < M.size(); j++)
+            {
+                if (notCount[j] && M[i][j])
+                {
+                    notCount[j] = false;
+                    student.push(j);
+                }
+            }
+        }
+        return;
+    }
+};
