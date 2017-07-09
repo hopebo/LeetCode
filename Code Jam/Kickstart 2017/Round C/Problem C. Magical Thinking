@@ -1,0 +1,64 @@
+//
+//  main.cpp
+//  test
+//
+//  Created by hope on 2017/7/7.
+//  Copyright © 2017年 hope. All rights reserved.
+//
+
+#include <iostream>
+#include <list>
+#include <fstream>
+#include <vector>
+using namespace std;
+
+int main() {
+    ifstream in("/Users/hope/Downloads/B-large-practice.in");
+    ofstream out("/Users/hope/Downloads/B-large_output.out");
+    int T;
+    in >> T;
+    for (int n = 1; n <= T; n++)
+    {
+        bool flag = true;
+        int N;
+        in >> N;
+        vector<vector<int> > row(N, vector<int>());
+        vector<vector<int> > col(N, vector<int>());
+        for (int i = 0; i < N; i++)
+        {
+            string line;
+            in >> line;
+            for (int j = 0; j < N; j++)
+            {
+                if (line[j] == 'X')
+                {
+                    row[i].push_back(j);
+                    col[j].push_back(i);
+                }
+            }
+        }
+        for (int i = 0; i < N; i++)
+        {
+            if (row[i].size() == 1)
+            {
+                if (col[row[i][0]].size() != 1)
+                {
+                    flag = false;
+                    break;
+                }
+                else
+                    continue;
+            }
+            if (row[i].size() != 2 || col[row[i][0]].size() != 2 || col[row[i][1]].size() != 2 || !(col[row[i][0]][0] == col[row[i][1]][0] && col[row[i][0]][1] == col[row[i][1]][1]))
+            {
+                flag = false;
+                break;
+            }
+        }
+        string res = flag ? "POSSIBLE" : "IMPOSSIBLE";
+        out << "Case #" << n << ": " << res << endl;
+    }
+    in.close();
+    out.close();
+    return 0;
+}
