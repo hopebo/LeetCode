@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int checkRecord(int n) {
+        const int base = pow(10, 9) + 7;
+        int count[2][2][3] = {{{1, 2, 2}, {2, 3, 3}}}, prev = 0, cur = 1;
+        for (int k = 0; k < n - 1; k++)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    int val = count[prev][i][2];
+                    if (j > 0)
+                        val = (val + count[prev][i][j-1]) % base;
+                    if (i > 0)
+                        val = (val + count[prev][i-1][2]) % base;
+                    count[cur][i][j] = val;
+                }
+            }
+            swap(prev, cur);
+        }
+        return count[prev][1][2];
+    }
+};
