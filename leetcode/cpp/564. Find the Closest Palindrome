@@ -1,0 +1,42 @@
+class Solution {
+public:
+    string nearestPalindromic(string n) {
+        if (n == "1")
+            return "0";
+        string direct = genPalindromic(n);
+        string bigger, smaller;
+        int abs_big, abs_small;
+        int absDiff = stoll(genPalindromic(n)) - stoll(n);
+        if (absDiff == 0)
+        {
+            bigger = changeString(n, 1);
+            smaller = changeString(n, -1);
+            return abs(stoll(smaller) - stoll(n)) <= abs(stoll(bigger) - stoll(n)) ? smaller : bigger;
+        }
+        else if (absDiff > 0)
+        {
+            smaller = changeString(n, -1);
+            return abs(stoll(smaller) - stoll(n)) <= absDiff ? smaller : direct;
+        }
+        else
+        {
+            bigger = changeString(n, 1);
+            return abs(absDiff) <= abs(stoll(bigger) - stoll(n)) ? direct : bigger;
+        }   
+    }
+    string changeString(string n, int num) {
+        int len = n.size();
+        string prefix = n.substr(0, ceil(len / 2.0)), suffix = n.substr(ceil(len / 2.0));
+        string new_prefix = to_string(stoi(prefix) + num);
+        if (new_prefix.size() < prefix.size() || new_prefix == "0")
+            return new_prefix == "0" ? string(suffix.size(), '9') : string(new_prefix.size()+suffix.size(), '9');
+        else
+            return genPalindromic(new_prefix+suffix);
+    }
+    string genPalindromic(string n) {
+        int len = n.size();
+        for (int i = 0; i < len / 2; i++)
+            n[len-1-i] = n[i];
+        return n;
+    }
+};
