@@ -12,27 +12,21 @@ public:
     vector<Point> outerTrees(vector<Point>& points) {
         vector<Point> res;
         vector<bool> ifadd(points.size(), false);
-        int cur = 0, next;
+        int firstIndex = 0, cur, next;
         for (int i = 0; i < points.size(); i++)
         {
-            if (points[i].x < points[cur].x)
-                cur = i;
-            else if (points[i].x == points[cur].x)
-            {
-                if (points[i].y < points[cur].y)
-                    cur = i;
-            }
+            if (points[i].x < points[firstIndex].x || points[i].x == points[firstIndex].x && points[i].y < points[firstIndex].y)
+                firstIndex = i;
         }
-        res.push_back(points[cur]);
-        ifadd[cur] = true;
-        int firstIndex = cur;
+        res.push_back(points[firstIndex]);
+        ifadd[firstIndex] = true;
+        cur = firstIndex;
         do {
             next = 0;
             for (int i = 0; i < points.size(); i++)
             {
-                if (i == cur)   continue;
                 int cross = calCross(points[cur], points[next], points[i]);
-                if (next == cur || cross > 0 || cross == 0 && calDist(points[cur], points[i]) > calDist(points[cur], points[next]))
+                if (cross > 0 || cross == 0 && calDist(points[cur], points[i]) > calDist(points[cur], points[next]))
                     next = i;
             }
             for (int i = 0; i < points.size(); i++)
