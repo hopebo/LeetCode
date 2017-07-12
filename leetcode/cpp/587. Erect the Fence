@@ -1,0 +1,59 @@
+/**
+ * Definition for a point.
+ * struct Point {
+ *     int x;
+ *     int y;
+ *     Point() : x(0), y(0) {}
+ *     Point(int a, int b) : x(a), y(b) {}
+ * };
+ */
+class Solution {
+public:
+    vector<Point> outerTrees(vector<Point>& points) {
+        vector<Point> res;
+        vector<bool> ifadd(points.size(), false);
+        int cur = 0, next;
+        for (int i = 0; i < points.size(); i++)
+        {
+            if (points[i].x < points[cur].x)
+                cur = i;
+            else if (points[i].x == points[cur].x)
+            {
+                if (points[i].y < points[cur].y)
+                    cur = i;
+            }
+        }
+        res.push_back(points[cur]);
+        ifadd[cur] = true;
+        int firstIndex = cur;
+        do {
+            next = 0;
+            for (int i = 0; i < points.size(); i++)
+            {
+                if (i == cur)   continue;
+                int cross = calCross(points[cur], points[next], points[i]);
+                if (next == cur || cross > 0 || cross == 0 && calDist(points[cur], points[i]) > calDist(points[cur], points[next]))
+                    next = i;
+            }
+            for (int i = 0; i < points.size(); i++)
+            {
+                if (!ifadd[i] && calCross(points[cur], points[next], points[i]) == 0)
+                {
+                    res.push_back(points[i]);
+                    ifadd[i] = true;
+                }
+            }
+            cur = next;
+        } while(cur != firstIndex);
+        return res;
+    }
+    int calCross(Point A, Point B, Point C) {
+        int AB_x = B.x - A.x, AB_y = B.y - A.y;
+        int BC_x = C.x - B.x, BC_y = C.y - B.y;
+        return AB_x * BC_y - AB_y * BC_x;
+    }
+    int calDist(Point A, Point B) {
+        int x_dist = B.x - A.x, y_dist = B.y - A.y;
+        return x_dist * x_dist + y_dist * y_dist;
+    }
+};
