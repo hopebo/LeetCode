@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int findLHS(vector<int>& nums) {
+        int res = 0;
+        map<int, int> numCount;
+        for (int num : nums)
+            numCount[num]++;
+        for (map<int, int>::iterator it = numCount.begin(); it != numCount.end(); it++)
+        {
+            if (numCount.count(it->first+1))
+                res = max(res, it->second+numCount[it->first+1]);
+        }
+        return res;
+    }
+};
