@@ -1,0 +1,39 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* mergeTrees(TreeNode* t1, TreeNode* t2) {
+        TreeNode* root = new TreeNode(0);
+        TreeNode *left, *right;
+        if (t1 == NULL && t2 == NULL)
+            return NULL;
+        else if (t1 == NULL)
+        {
+            root->val += t2->val;
+            left = mergeTrees(NULL, t2->left);
+            right = mergeTrees(NULL, t2->right);
+        }
+        else if (t2 == NULL)
+        {
+            root->val += t1->val;
+            left = mergeTrees(t1->left, NULL);
+            right = mergeTrees(t1->right, NULL);
+        }
+        else
+        {
+            root->val += t1->val + t2->val;
+            left = mergeTrees(t1->left, t2->left);
+            right = mergeTrees(t1->right, t2->right);
+        }
+        root->left = left;
+        root->right = right;
+        return root;
+    }
+};
