@@ -1,0 +1,99 @@
+//
+//  main.cpp
+//  test
+//
+//  Created by hope on 2017/7/7.
+//  Copyright © 2017年 hope. All rights reserved.
+//
+
+#include <iostream>
+#include <list>
+#include <fstream>
+#include <vector>
+#include <set>
+#include <algorithm>
+using namespace std;
+
+int solve_small(string answer, string ans, int score, int Q) {
+    int same = 0, differ = 0;
+    for (int i = 0; i < Q; i++)
+    {
+        if (answer[i] == ans[i])
+            same++;
+        else
+            differ++;
+    }
+    return Q - abs(same - differ);
+}
+int solve_large(string answer[], string ans, int score[], int Q) {
+    int same_both = 0, same_one = 0, same_two = 0, differ_both = 0;
+    cout << answer[0] << "#" << answer[1] << endl;
+    cout << score[0] << "#" << score[1] << endl;
+    for (int i = 0; i < Q; i++)
+    {
+        if (answer[0][i] == answer[1][i])
+        {
+            if (ans[i] == answer[0][i])
+                same_both++;
+            else
+                differ_both++;
+        }
+        else
+        {
+            if (ans[i] == answer[0][i])
+                same_one++;
+            else
+                same_two++;
+        }
+    }
+    cout << same_both + same_one + same_two + differ_both << endl;
+    int res = 0;
+    for (int a = 0; a <= same_both; a++)
+    {
+        for (int b = 0; b <= same_one; b++)
+        {
+            for (int c = 0; c <= same_two; c++)
+            {
+                for (int d = 0; d <= differ_both; d++)
+                {
+                    if (a+b+same_two-c+differ_both-d == score[0] && a+same_one-b+c+differ_both-d == score[1])
+                        res = max(res, a+b+c+d);
+                }
+            }
+        }
+    }
+    return res;
+}
+int main() {
+    ifstream in("/Users/hope/Downloads/C-large-practice.in");
+    ofstream out("/Users/hope/Downloads/C-large_output.out");
+    int T;
+    in >> T;
+    for (int t = 0; t < T; t++)
+    {
+        int N, Q;
+        in >> N >> Q;
+        int res = 0;
+        if (N == 1)
+        {
+            string answer, ans;
+            in >> answer >> ans;
+            int score;
+            in >> score;
+            res = solve_small(answer, ans, score, Q);
+        }
+        else
+        {
+            string answer[2];
+            string ans;
+            in >> answer[0] >> answer[1] >> ans;
+            int score[2];
+            in >> score[0] >> score[1];
+            res = solve_large(answer, ans, score, Q);
+        }
+        out << "Case #" << t+1 << ": " << res << endl;
+    }
+    in.close();
+    out.close();
+    return 0;
+}
