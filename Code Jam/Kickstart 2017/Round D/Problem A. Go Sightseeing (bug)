@@ -1,0 +1,63 @@
+//
+//  main.cpp
+//  test
+//
+//  Created by hope on 2017/7/7.
+//  Copyright © 2017年 hope. All rights reserved.
+//
+
+#include <iostream>
+#include <list>
+#include <fstream>
+#include <vector>
+#include <set>
+#include <algorithm>
+using namespace std;
+
+struct transport {
+    int Si;
+    int Fi;
+    int Di;
+    transport(){Si = 0, Fi = 0, Di = 0;}
+};
+void solve(vector<transport>& city, int& res, int cur, int site, int time, int Ts) {
+    if (time < city[site].Si)
+        return;
+    if (site == 0)
+    {
+        if (time-Ts >= city[site].Si)
+            cur++;
+        res = max(res, cur);
+        return;
+    }
+    solve(city, res, cur, site-1, ((time-city[site].Si)/city[site].Fi)*city[site].Fi+city[site].Si-city[site-1].Di, Ts);
+    if (time-Ts >= city[site].Si)
+    {
+        solve(city, res, cur+1, site-1, ((time-Ts-city[site].Si)/city[site].Fi)*city[site].Fi+city[site].Si-city[site-1].Di, Ts);
+    }
+    return;
+}
+int main() {
+    ifstream in("/Users/hope/Downloads/A-small-attempt1.in");
+    ofstream out("/Users/hope/Downloads/A-small_output1.out");
+    int T;
+    in >> T;
+    for (int t = 0; t < T; t++)
+    {
+        int N, Ts, Tf;
+        in >> N >> Ts >> Tf;
+        vector<transport> city;
+        for (int i = 0; i < N-1; i++)
+        {
+            transport input;
+            in >> input.Si >> input.Fi >> input.Di;
+            city.push_back(input);
+        }
+        int res = -1;
+        solve(city, res, 0, N-2, Tf-city[N-2].Di, Ts);
+        out << "Case #" << t+1 << ": " << (res == -1 ? "IMPOSSIBLE" : to_string(res)) << endl;
+    }
+    in.close();
+    out.close();
+    return 0;
+}
