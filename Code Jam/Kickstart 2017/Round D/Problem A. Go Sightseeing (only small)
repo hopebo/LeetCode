@@ -21,25 +21,23 @@ struct transport {
     transport(){Si = 0, Fi = 0, Di = 0;}
 };
 void solve(vector<transport>& city, int& res, int cur, int site, int time, int Ts) {
-    if (time < city[site].Si)
-        return;
     if (site == 0)
     {
-        if (time-Ts >= city[site].Si)
+        if (time-Ts >= 0)
             cur++;
         res = max(res, cur);
         return;
     }
-    solve(city, res, cur, site-1, ((time-city[site].Si)/city[site].Fi)*city[site].Fi+city[site].Si-city[site-1].Di, Ts);
-    if (time-Ts >= city[site].Si)
-    {
-        solve(city, res, cur+1, site-1, ((time-Ts-city[site].Si)/city[site].Fi)*city[site].Fi+city[site].Si-city[site-1].Di, Ts);
-    }
+    int Si = city[site-1].Si, Fi = city[site-1].Fi, Di = city[site-1].Di;
+    if (time-Di-Si >= 0)
+        solve(city, res, cur, site-1, Si+(time-Di-Si)/Fi*Fi, Ts);
+    if (time-Di-Si-Ts >= 0)
+        solve(city, res, cur+1, site-1, Si+(time-Ts-Di-Si)/Fi*Fi, Ts);
     return;
 }
 int main() {
-    ifstream in("/Users/hope/Downloads/A-small-attempt1.in");
-    ofstream out("/Users/hope/Downloads/A-small_output1.out");
+    ifstream in("/Users/hope/Downloads/A-large.in");
+    ofstream out("/Users/hope/Downloads/A-large_output.out");
     int T;
     in >> T;
     for (int t = 0; t < T; t++)
@@ -54,7 +52,8 @@ int main() {
             city.push_back(input);
         }
         int res = -1;
-        solve(city, res, 0, N-2, Tf-city[N-2].Di, Ts);
+        if (Tf-city[N-2].Di-city[N-2].Si >= 0)
+            solve(city, res, 0, N-2, city[N-2].Si+(Tf-city[N-2].Di-city[N-2].Si)/city[N-2].Fi*city[N-2].Fi, Ts);
         out << "Case #" << t+1 << ": " << (res == -1 ? "IMPOSSIBLE" : to_string(res)) << endl;
     }
     in.close();
