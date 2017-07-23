@@ -1,0 +1,28 @@
+class Solution {
+public:
+    /*
+     * param k : As description.
+     * param n : As description.
+     * return: How many k's between 0 and n.
+     */
+    int digitCounts(int k, int n) {
+        // write your code here
+        int res = 0, coef = 1, residue = 0, consult = n;
+        do {
+            residue = consult % 10;
+            consult = consult / 10;
+            res += consult * coef;
+            if (k == 0 && coef > 1) {
+                if (consult == 0)
+                    continue;
+                res -= coef;
+            }
+            if (residue > k)
+                res += coef;
+            else if (residue == k)
+                res += n % coef + 1;
+            coef = 10 * coef;
+        } while (consult > 0);
+        return res;
+    }
+};
