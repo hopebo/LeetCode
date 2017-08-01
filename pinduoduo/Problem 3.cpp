@@ -1,3 +1,13 @@
+#include <iostream>
+#include <list>
+#include <fstream>
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <queue>
+#include <math.h>
+using namespace std;
+
 int main() {
     int n, m, num;
     vector<int> h, w;
