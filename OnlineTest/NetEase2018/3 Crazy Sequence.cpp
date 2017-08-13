@@ -1,3 +1,6 @@
+/*
+将n个学生进行重新排列，使相邻两个学生的身高差（绝对值）之和最大，输出这个最大值
+*/
 #include <iostream>
 #include <string>
 #include <math.h>
