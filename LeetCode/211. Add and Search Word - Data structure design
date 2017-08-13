@@ -1,0 +1,64 @@
+class WordDictionary {
+private:
+	struct node {
+		bool isword;
+		node *letter[26] = { NULL };
+		node() { isword = false; }
+	};
+	node *root;
+public:
+	/** Initialize your data structure here. */
+	WordDictionary() {
+		root = new node;
+		root->isword = true;
+	}
+
+	/** Adds a word into the data structure. */
+	void addWord(string word) {
+		if (word.empty())
+			return;
+		node *p = root;
+		for (int i = 0; i < word.size(); i++)
+		{
+			if (p->letter[word[i] - 'a'] == NULL)
+				p->letter[word[i] - 'a'] = new node;
+			p = p->letter[word[i] - 'a'];
+		}
+		p->isword = true;
+		return;
+	}
+
+	/** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+	bool search(string word) {
+		return solve(word, root);
+	}
+	
+	bool solve(string word, node *root)
+	{
+		if (word.empty())
+			return root->isword;
+		if (word[0] != '.')
+		{
+			if (root->letter[word[0] - 'a'] == NULL)
+				return false;
+			else
+				return solve(word.substr(1), root->letter[word[0] - 'a']);
+		}
+		else
+		{
+			for (int i = 0; i < 26; i++)
+			{
+				if (root->letter[i] != NULL && solve(word.substr(1), root->letter[i]))
+					return true;
+			}
+		}
+		return false;
+	}
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * bool param_2 = obj.search(word);
+ */

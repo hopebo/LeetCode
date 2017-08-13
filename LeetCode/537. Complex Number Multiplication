@@ -1,0 +1,15 @@
+class Solution {
+public:
+    string complexNumberMultiply(string a, string b) {
+        pair<int, int> num1 = convertInt(a), num2 = convertInt(b);
+        int re = num1.first * num2.first - num1.second * num2.second, im = num1.first * num2.second + num1.second * num2.first;
+        return to_string(re) + "+" + to_string(im) + "i";
+    }
+    pair<int, int> convertInt(string a) {
+        pair<int, int> res;
+        int index = a.find_first_of('+');
+        res.first = stoi(a.substr(0, index));
+        res.second = stoi(a.substr(index+1, a.size()-index-2));
+        return res;
+    }
+};

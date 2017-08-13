@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        vector<vector<int>> res;
+        vector<int> sequence;
+        solve(res, sequence, nums, 0);
+        return res;
+    }
+    void solve(vector<vector<int>>& res, vector<int>& sequence, vector<int>& nums, int start) {
+        if (sequence.size() >= 2)
+            res.push_back(sequence);
+        set<int> used;
+        for (int i = start; i < nums.size(); i++)
+        {
+            if ((sequence.empty() || nums[i] >= sequence.back()) && !used.count(nums[i]))
+            {
+                used.insert(nums[i]);
+                sequence.push_back(nums[i]);
+                solve(res, sequence, nums, i+1);
+                sequence.pop_back();
+            }
+        }
+        return;
+    }
+};

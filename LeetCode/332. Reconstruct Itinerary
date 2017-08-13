@@ -1,0 +1,29 @@
+class Solution {
+public:
+	vector<string> findItinerary(vector<pair<string, string>> tickets) {
+		vector<string> ans;
+		if (tickets.empty())
+			return ans;
+		map<string, multiset<string>> ticket;
+		for (int i = 0; i < tickets.size(); i++)
+			ticket[tickets[i].first].insert(tickets[i].second);
+		stack<string> airport;
+		airport.push("JFK");
+		while (!airport.empty())
+		{
+			string site = airport.top();
+			if (ticket[site].empty())
+			{
+				ans.push_back(site);
+				airport.pop();
+			}
+			else
+			{
+				airport.push(*(ticket[site].begin()));
+				ticket[site].erase(ticket[site].begin());
+			}
+		}
+		reverse(ans.begin(), ans.end());
+		return ans;
+	}
+};

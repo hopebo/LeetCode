@@ -1,0 +1,32 @@
+class Solution {
+public:
+    vector<string> findRepeatedDnaSequences(string s) {
+        vector<string> res;
+        if (s.empty())
+            return res;
+		set<int> sequence;
+		set<int> already;
+		map<char, int> cast;
+		cast['A'] = 0;
+		cast['C'] = 1;
+		cast['G'] = 2;
+		cast['T'] = 3;
+		for (int i = 0; i <= int(s.size())-10; i++)
+		{
+			int num = 0;
+			for (int j = i; j < i + 10; j++)
+			{
+				num <<= 2;
+				num |= cast[s[j]];
+			}
+			if (!sequence.count(num))
+				sequence.insert(num);
+			else if (!already.count(num))
+			{
+				res.push_back(s.substr(i, 10));
+				already.insert(num);
+			}				
+		}
+		return res;
+    }
+};

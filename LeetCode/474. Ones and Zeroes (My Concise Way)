@@ -1,0 +1,48 @@
+class Solution {
+public:
+    static bool cmp(pair<int, int>& compare1, pair<int, int>& compare2)
+    {
+        if (compare1.first < compare2.first)
+            return true;
+        else if (compare1.first == compare2.first)
+            return compare1.second < compare2.second;
+        else
+            return false;
+    }
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        if (strs.empty())
+            return 0;
+        vector<pair<int, int>> str;
+        for (string a : strs)
+            str.push_back(count(a));
+        sort(str.begin(), str.end(), cmp);
+        int res = 0;
+        solve(str, res, m, n, 0, 0);
+        return res;
+    }
+    void solve(vector<pair<int, int>>& str, int& res, int zero, int one, int start, int len)
+    {
+        res = max(res, len);
+        int prev_one = INT_MAX;
+        for (int i = start; i < str.size(); i++)
+        {
+            if (zero < str[i].first || one < str[i].second || str[i].second >= prev_one)
+                continue;
+            solve(str, res, zero-str[i].first, one-str[i].second, i+1, len+1);
+            prev_one = str[i].second;
+        }
+        return;
+    }
+    pair<int, int> count(string& str)
+    {
+        int zero = 0, one = 0;
+        for (char digit : str)
+        {
+            if (digit == '0')
+                zero++;
+            else
+                one++;
+        }
+        return pair<int, int>(zero, one);
+    }
+};

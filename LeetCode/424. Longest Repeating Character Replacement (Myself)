@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int characterReplacement(string s, int k) {
+        if (s.empty())
+            return 0;
+        vector<vector<pair<int, int>>> letter(26, vector<pair<int, int>>());
+        int left = 0, right = 0;
+        while (right < s.size())
+        {
+            while (right < s.size() && s[right] == s[left])
+                right++;
+            letter[s[left]-'A'].push_back(pair<int, int>(left, right-1));
+            left = right;
+        }
+        int res = 0;
+        for (int i = 0; i < 26; i++)
+        {
+            if (!letter[i].empty())
+                res = max(res, maxLength(letter[i], s.size()-1, k));
+        }
+        return res;
+    }
+    int maxLength(vector<pair<int, int>> repeat, int end, int k)
+    {
+        int left = 0, right = 1;
+        int res = repeat[0].second - repeat[0].first + 1;
+        int toRep = 0;
+        for (; right < repeat.size(); right++)
+        {
+            if (toRep + repeat[right].first - repeat[right-1].second - 1 > k)
+            {
+                res = max(res, repeat[right-1].second - repeat[left].first + 1 + min(k - toRep, repeat[left].first + end - repeat[right-1].second));
+                toRep += repeat[right].first - repeat[right-1].second - 1;
+                while (toRep > k)
+                {
+                    left++;
+                    toRep -= repeat[left].first - repeat[left-1].second - 1;
+                }
+            }
+            else
+                toRep += repeat[right].first - repeat[right-1].second - 1;
+        }
+        res = max(res, repeat[right-1].second - repeat[left].first + 1 + min(k - toRep, repeat[left].first + end - repeat[right-1].second));
+        return res;
+    }
+};

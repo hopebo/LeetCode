@@ -1,0 +1,18 @@
+class Solution {
+public:
+    bool repeatedSubstringPattern(string s) {
+        int len = s.size();
+        for (int i = 1; i <= len/2; i++)
+        {
+            if (len % i)
+                continue;
+            string sub = s.substr(0, i);
+            string temp = "";
+            for (int j = 0; j < len/i; j++)
+                temp.append(sub);
+            if (temp == s)
+                return true;
+        }
+        return false;
+    }
+};

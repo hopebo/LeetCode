@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        if (nums.empty())
+			return -1;
+		int n = nums.size(), threshold = n / 2;
+		map<int, int> amount;
+		for (int i = 0;i < n;i++)
+		{
+			if (amount.count(nums[i]))
+				amount[nums[i]]++;
+			else
+				amount[nums[i]] = 1;
+			if (amount[nums[i]] > threshold)
+				return nums[i];
+		}
+		return -1;
+    }
+};

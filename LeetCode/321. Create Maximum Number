@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<int> maxNumber(vector<int>& nums1, vector<int>& nums2, int k) {
+    vector<int> res(k, INT_MIN);
+		int m = nums1.size(), n = nums2.size();
+		for (int len = max(0, k-n); len <= min(k, m); len++)
+		{
+			vector<int> candidate(merge(findMax(nums1, len), findMax(nums2, k - len)));
+			if (greater(candidate, 0, res, 0))
+				res.assign(candidate.begin(), candidate.end());
+		}
+		return res;
+	}
+	bool greater(vector<int> compare1, int i, vector<int> compare2, int j)
+	{
+		while (i < compare1.size() && j < compare2.size() && compare1[i] == compare2[j])
+		{
+			i++;
+			j++;
+		}
+		return j == compare2.size() || (i != compare1.size() && compare1[i] > compare2[j]);
+	}
+	vector<int> merge(vector<int> nums1, vector<int> nums2)
+	{
+		vector<int> res;
+		int i = 0, j = 0, len1 = nums1.size(), len2 = nums2.size();
+		while (i < nums1.size() || j < nums2.size())
+		{
+			int digit = greater(nums1, i, nums2, j) ? nums1[i++] : nums2[j++];
+			res.push_back(digit);
+		}
+		return res;
+	}
+	vector<int> findMax(vector<int>& nums, int k)
+	{
+		vector<int> res(k, INT_MIN);
+		int len = nums.size();
+		for (int i = 0, j = 0; i < len; i++)
+		{
+			while (i-j+k < len && j > 0 && nums[i] > res[j-1]) j--;
+			if (j < k)	res[j++] = nums[i];
+		}
+		return res;
+    }
+};

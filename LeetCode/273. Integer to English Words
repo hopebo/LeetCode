@@ -1,0 +1,58 @@
+class Solution {
+public:
+    string numberToWords(int num) {
+        map<int, string> dic;
+		dic[0] = "Zero", dic[1] = "One", dic[2] = "Two", dic[3] = "Three", dic[4] = "Four", dic[5] = "Five", dic[6] = "Six", dic[7] = "Seven", dic[8] = "Eight", dic[9] = "Nine", dic[10] = "Ten";
+		dic[11] = "Eleven", dic[12] = "Twelve", dic[13] = "Thirteen", dic[14] = "Fourteen", dic[15] = "Fifteen", dic[16] = "Sixteen", dic[17] = "Seventeen", dic[18] = "Eighteen", dic[19] = "Nineteen";
+		dic[20] = "Twenty", dic[30] = "Thirty", dic[40] = "Forty", dic[50] = "Fifty", dic[60] = "Sixty", dic[70] = "Seventy", dic[80] = "Eighty", dic[90] = "Ninety";
+		dic[100] = "Hundred", dic[1000] = "Thousand", dic[1000000] = "Million", dic[1000000000] = "Billion";
+		if (num <= 20)
+			return dic[num];
+		string ans = "";
+		int coef = 1;
+		while (num != 0)
+		{
+			if (coef == 1)
+				ans = solve(dic, num % 1000) + ans;
+			else if (num % 1000 != 0)
+			{
+				if (!ans.empty())
+					ans = solve(dic, num % 1000) + " " + dic[coef] + " " + ans;
+				else
+					ans = solve(dic, num % 1000) + " " + dic[coef];
+			}
+			num = num / 1000;
+			coef *= 1000;
+		}
+		return ans;
+	}
+	string solve(map<int, string>& dic, int num)	//num < 1000
+	{
+		string word = "";
+		int hundred = num / 100;
+		if (hundred != 0)
+			word += dic[hundred] + " " + dic[100];
+		num = num % 100;
+		int decade = num / 10;
+		if (decade != 0)
+		{
+			if (!word.empty())
+				word += " ";
+			if (decade == 1)
+			{
+				word += dic[num];
+				return word;
+			}
+			else
+				word += dic[decade * 10];
+		}
+		num = num % 10;
+		if (num != 0)
+		{
+			if (!word.empty())
+				word += " ";
+			word += dic[num];
+		}			
+		return word;
+    }
+};

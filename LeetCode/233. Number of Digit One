@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int countDigitOne(int n) {
+        int num = 0, quotient = n, remainder = 1, coefficient = 1, left = 1;
+        if (n <= 0)
+            return num;
+		while (quotient != 0)
+		{
+			remainder = quotient % 10;
+			quotient = quotient / 10;
+			num += quotient*coefficient;
+			if (remainder > 1)
+				num += coefficient;
+			else if (remainder == 1)
+				num += left;
+			coefficient *= 10;
+			left += remainder*(coefficient / 10);
+		}
+		return num;
+    }
+};

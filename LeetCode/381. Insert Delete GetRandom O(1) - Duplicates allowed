@@ -1,0 +1,40 @@
+private:
+	map<int, set<int>> container;
+	vector<int> nums;
+public:
+	/** Initialize your data structure here. */
+	RandomizedCollection() {
+		srand((unsigned int)time(NULL));
+	}
+
+	/** Inserts a value to the collection. Returns true if the collection did not already contain the specified element. */
+	bool insert(int val) {
+		bool flag = container[val].empty();
+		container[val].insert(nums.size());
+		nums.push_back(val);
+		return flag;
+	}
+
+	/** Removes a value from the collection. Returns true if the collection contained the specified element. */
+	bool remove(int val) {
+		if (container[val].empty())
+			return false;
+		else
+		{
+			int site = *container[val].begin();
+			container[val].erase(site);
+			if (site != nums.size() - 1)
+			{
+				nums[site] = nums.back();
+				container[nums.back()].erase(nums.size() - 1);
+				container[nums.back()].insert(site);
+			}			
+			nums.pop_back();
+			return true;
+		}
+	}
+
+	/** Get a random element from the collection. */
+	int getRandom() {
+		return nums[rand() % nums.size()];
+	}

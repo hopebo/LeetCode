@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int getMaxRepetitions(string s1, int n1, string s2, int n2) {
+        int repeat = 0, index = 0, len1 = s1.size(), len2 = s2.size();
+        vector<int> repeatTimes;
+        vector<int> nextIndex;
+        for (int k = 0; k < n1; k++)
+        {
+            for (int i = 0; i < len1; i++)
+            {
+                if (s1[i] == s2[index])
+                {
+                    if (index == len2-1)
+                    {
+                        repeat++;
+                        index = 0;
+                    }
+                    else
+                        index++;
+                }
+            }
+            repeatTimes.push_back(repeat);
+            nextIndex.push_back(index);
+            for (int start = 0; start < (int)nextIndex.size()-1; start++)
+            {
+                if (nextIndex[start] == index)
+                {
+                    int prefix = repeatTimes[start];
+                    int loop = (n1-start-1)/(k-start) * (repeatTimes[k]-repeatTimes[start]);
+                    int suffix = repeatTimes[start+(n1-start-1)%(k-start)] - repeatTimes[start];
+                    return (prefix + loop + suffix) / n2;
+                }
+            }
+        }
+        return repeat / n2;
+    }
+};

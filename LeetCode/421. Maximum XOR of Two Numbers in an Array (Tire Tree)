@@ -1,0 +1,53 @@
+class Solution {
+private:
+    struct TireNode{
+       TireNode *next[2];
+       TireNode()   {next[0] = NULL;    next[1] = NULL;}
+    };
+    TireNode *root = new TireNode();
+public:
+    void buildTree(vector<int>& nums)
+    {
+        for (int i = 0; i < nums.size(); i++)
+        {
+            int num = nums[i];
+            TireNode *p = root;
+            for (int k = 31; k >= 0; k--)
+            {
+                int digit = (num >> k) & 1;
+                if (!p->next[digit])
+                    p->next[digit] = new TireNode();
+                p = p->next[digit];
+            }
+        }
+        return;
+    }
+    int helper(int num)
+    {
+        int res = 0;
+        TireNode *p = root;
+        for (int k = 31; k >= 0; k--)
+        {
+            int digit = (num >> k) & 1 ? 0 : 1;
+            if (p->next[digit])
+            {
+                res <<= 1;
+                res |= 1;
+                p = p->next[digit];
+            }
+            else
+            {
+                res <<= 1;
+                p = p->next[digit ? 0 : 1];
+            }
+        }
+        return res;
+    }
+    int findMaximumXOR(vector<int>& nums) {
+        int Maximum = 0;
+        buildTree(nums);
+        for (int i = 0; i < nums.size(); i++)
+            Maximum = max(Maximum, helper(nums[i]));
+        return Maximum;
+    }
+};

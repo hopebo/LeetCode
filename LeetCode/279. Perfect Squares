@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int numSquares(int n) {
+        vector<int> nums(n + 1, 0);
+		for (int i = 1; i <= n; i++)
+		{
+			int local_min = INT_MAX;
+			for (int j = 1; j*j <= i; j++)
+			{
+				local_min = min(local_min, nums[i - j*j] + 1);
+			}
+			nums[i] = local_min;
+		}
+		return nums[n];
+    }
+};

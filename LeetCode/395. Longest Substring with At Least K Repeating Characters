@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int longestSubstring(string s, int k) {
+        if (s.empty() || k > s.size())
+			return 0;
+		vector<int> letter(26, 0);
+		for (auto i : s)
+			letter[i - 'a']++;
+		int index = 0;
+		while (index < s.size() && (letter[s[index] - 'a'] == 0 || letter[s[index] - 'a'] >= k))	index++;
+		if (index == s.size())
+			return s.size();
+		int left = longestSubstring(s.substr(0, index), k);
+		int right = longestSubstring(s.substr(index + 1), k);
+		return max(left, right);
+    }
+};

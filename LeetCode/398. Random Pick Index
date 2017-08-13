@@ -1,0 +1,29 @@
+class Solution {
+private:
+	vector<int> number;
+public:
+	Solution(vector<int> nums) {
+		number.assign(nums.begin(), nums.end());
+		srand((unsigned int)time(NULL));
+	}
+
+	int pick(int target) {
+		int index, count = 0;
+		for (int i = 0; i < number.size(); i++)
+		{
+			if (number[i] == target)
+			{
+				count++;
+				if (rand() % count == count - 1)
+					index = i;
+			}
+		}
+		return index;
+	}
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(nums);
+ * int param_1 = obj.pick(target);
+ */

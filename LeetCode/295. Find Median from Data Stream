@@ -1,0 +1,42 @@
+class MedianFinder {
+private:
+	struct cmp {
+		bool operator()(int& a, int& b)
+		{
+			return a > b;
+		}
+	};
+	priority_queue<int> minor;
+	priority_queue<int, vector<int>, cmp> major;
+public:
+	/** initialize your data structure here. */
+	MedianFinder() {
+
+	}
+
+	void addNum(int num) {
+		minor.push(num);
+		major.push(minor.top());
+		minor.pop();
+		if (minor.size() < major.size())
+		{
+			minor.push(major.top());
+			major.pop();
+		}
+		return;
+	}
+
+	double findMedian() {
+		if (minor.size() == major.size())
+			return (double(minor.top()) + major.top()) / 2;
+		else
+			return double(minor.top());
+	}
+};
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */

@@ -1,0 +1,41 @@
+class Solution {
+public:
+    bool isNumber(string s) {
+        bool valid = false;
+		int i = 0, len = s.size();
+		while (i < len && s[i] == ' ')
+			i++;
+		if (i < len && (s[i] == '+' || s[i] == '-')) i++;
+		while (i < len && (s[i] >= '0' && s[i] <= '9'))
+		{
+			valid = true;
+			i++;
+		}
+		if (i < len && s[i] == '.')
+		{
+			i++;
+			while (i < len && (s[i] >= '0' && s[i] <= '9'))
+			{
+				valid = true;
+				i++;
+			}
+		}
+		if (i < len && s[i] == 'e' && valid)
+		{
+			valid = false;
+			i++;
+			if (i < len && (s[i] == '+' || s[i] == '-')) i++;
+			while (i < len && (s[i] >= '0' && s[i] <= '9'))
+			{
+				valid = true;
+				i++;
+			}
+		}
+		while (i < len && s[i] == ' ')
+			i++;
+		if (i == len)
+			return valid;
+		else
+			return false;
+    }
+};

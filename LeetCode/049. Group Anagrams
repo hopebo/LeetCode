@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        vector<vector<string>> ans;
+        if(strs.empty())
+            return ans;
+        map<string,int> strNum;
+        int num = 0;
+        for(int i = 0;i < strs.size();i++)
+        {
+            string temp(strs[i]);
+            
+            sort(temp.begin(), temp.end());
+            if(strNum.count(temp))
+            {
+                ans[strNum[temp]].push_back(strs[i]);
+            }
+            else
+            {
+                strNum[temp] = num;
+                vector<string> p;
+                p.push_back(strs[i]);
+                ans.push_back(p);
+                num++;
+            }
+        }
+        return ans;
+    }
+};

@@ -1,0 +1,34 @@
+class Solution {
+public:
+    vector<pair<int, int>> getSkyline(vector<vector<int>>& buildings) {
+        vector<pair<int, int>> res;
+		if (buildings.empty())
+			return res;
+		priority_queue<pair<int, int>> build;
+		int i = 0, len = buildings.size(), curX = 0, curH = -1;
+		while (i < len || !build.empty())
+		{
+			curX = build.empty() ? buildings[i][0] : build.top().second;
+			if (i >= len || buildings[i][0] > curX)
+			{
+				while (!build.empty() && (build.top().second <= curX))
+				{
+					build.pop();
+				}
+			}
+			else
+			{
+				curX = buildings[i][0];
+				while (i < len && buildings[i][0] == curX)
+				{
+					build.push(pair<int, int>(buildings[i][2], buildings[i][1]));
+					i++;
+				}
+			}
+			curH = build.empty() ? 0 : build.top().first;
+			if (res.empty() || (res.back().second != curH))
+				res.push_back(pair<int, int>(curX, curH));
+		}
+		return res;
+    }
+};

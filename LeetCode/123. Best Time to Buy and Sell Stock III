@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        if (prices.size() < 2)
+            return 0;
+        int K = 2;  //denotes number of most transactions
+        vector<vector<int>> profit(K+1, vector<int>(prices.size(),0));
+        int maxProfit = 0;
+        for (int i = 1;i < K+1;i++)
+        {
+            int maxtemp = profit[i-1][0]-prices[0];
+            for (int j = 1;j < prices.size();j++)
+            {
+                profit[i][j] = max(profit[i][j-1], prices[j]+maxtemp);
+                maxtemp = max(maxtemp, profit[i-1][j-1]-prices[j]);
+                maxProfit = max(maxProfit, profit[i][j]);
+            }
+        }
+        return maxProfit;
+    }
+};

@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int scheduleCourse(vector<vector<int>>& courses) {
+        sort(courses.begin(), courses.end(), [](vector<int>& course1, vector<int>& course2){return course1[1] < course2[1];});
+        int time = 0, count = 0;
+        priority_queue<int> cost_time;
+        for (int i = 0; i < courses.size(); i++)
+        {
+            if (time + courses[i][0] <= courses[i][1])
+            {
+                time += courses[i][0];
+                count++;
+                cost_time.push(courses[i][0]);
+            }
+            else
+            {
+                if (!cost_time.empty() && cost_time.top() > courses[i][0])
+                {
+                    time -= cost_time.top() - courses[i][0];
+                    cost_time.pop();
+                    cost_time.push(courses[i][0]);
+                }
+            }
+        }
+        return count;
+    }
+};

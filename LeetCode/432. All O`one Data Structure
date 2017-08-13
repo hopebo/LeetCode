@@ -1,0 +1,67 @@
+class AllOne {
+private:
+    map<string, int> dic;
+    map<int, set<string>> sequence;
+public:
+    /** Initialize your data structure here. */
+    AllOne() {
+        
+    }
+    
+    /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
+    void inc(string key) {
+        if (dic.count(key))
+        {
+            sequence[dic[key]].erase(key);
+            if (sequence[dic[key]].empty())
+                sequence.erase(dic[key]);
+            dic[key]++;
+        }
+        else
+        {
+            dic[key] = 1;
+        }
+        sequence[dic[key]].insert(key);
+        return;
+    }
+    
+    /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
+    void dec(string key) {
+        if (!dic.count(key))
+            return;
+        sequence[dic[key]].erase(key);
+        if (sequence[dic[key]].empty())
+            sequence.erase(dic[key]);
+        if (dic[key] == 1)
+            dic.erase(key);
+        else
+        {
+            dic[key]--;
+            sequence[dic[key]].insert(key);
+        }
+        return;
+    }
+    
+    /** Returns one of the keys with maximal value. */
+    string getMaxKey() {
+        if (sequence.empty())
+            return "";
+        return *(sequence.rbegin()->second.begin());
+    }
+    
+    /** Returns one of the keys with Minimal value. */
+    string getMinKey() {
+        if (sequence.empty())
+            return "";
+        return *(sequence.begin()->second.begin());
+    }
+};
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne obj = new AllOne();
+ * obj.inc(key);
+ * obj.dec(key);
+ * string param_3 = obj.getMaxKey();
+ * string param_4 = obj.getMinKey();
+ */

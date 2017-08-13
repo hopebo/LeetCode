@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int splitArray(vector<int>& nums, int m) {
+        int max_value = 0, sum = 0;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            max_value = max(max_value, nums[i]);
+            sum += nums[i];
+        }
+        int low = max_value, high = sum;
+        while (low < high)
+        {
+            int mid = low + (high - low)/2;
+            int count = split(nums, mid);
+            if (count > m)
+                low = mid + 1;
+            else
+                high = mid;
+        }
+        return low;
+    }
+    int split(vector<int>& nums, int threshold)
+    {
+        int count = 0, i = 0;
+        while (i < nums.size())
+        {
+            int sum = 0;
+            while (i < nums.size() && sum + nums[i] <= threshold)
+            {
+                sum += nums[i];
+                i++;
+            }
+            count++;
+        }
+        return count;
+    }
+};

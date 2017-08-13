@@ -1,0 +1,34 @@
+class Solution {
+public:
+	int maximalSquare(vector<vector<char>>& matrix) {
+		if (matrix.empty())
+			return 0;
+		int Max = 0, row = matrix.size(), column = matrix[0].size();
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < column; j++)
+			{
+				if (matrix[i][j] == '1' && min(row - i, column - j) > Max)
+					Max = max(Max, solve(matrix, i, j, row, column));
+			}
+		}
+		return Max * Max;
+	}
+	int solve(vector<vector<char>>& matrix, int curX, int curY, int row, int column)
+	{
+		int maxSquare = 1;
+		for (int edge = 2; edge <= min(row - curX, column - curY); edge++)
+		{
+			int i = curX, j = curY + edge - 1;
+			for (; i <= curX + edge - 1; i++)
+				if (matrix[i][j] != '1')
+					return maxSquare;
+			i = curX + edge - 1;
+			for (; j >= curY; j--)
+				if (matrix[i][j] != '1')
+					return maxSquare;
+			maxSquare++;
+		}
+		return maxSquare;
+	}
+};

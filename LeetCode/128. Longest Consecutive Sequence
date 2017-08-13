@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        int maxLen = 0;
+        map<int, pair<int,int>> conse;
+        for(int i = 0;i < nums.size();i++)
+        {
+            if(conse.count(nums[i]))
+                continue;
+            bool left = conse.count(nums[i]-1), right = conse.count(nums[i]+1);
+            if (!left && !right)
+            {
+                conse[nums[i]] = pair<int,int>(nums[i],nums[i]);
+            }
+            else if (left && right)
+            {
+                conse[nums[i]] = pair<int,int>(conse[nums[i]-1].first,conse[nums[i]+1].second);
+                conse[conse[nums[i]].first].second = conse[nums[i]].second;
+                conse[conse[nums[i]].second].first = conse[nums[i]].first;
+            }
+            else if(left)
+            {
+                conse[nums[i]] = pair<int,int>(conse[nums[i]-1].first,nums[i]);
+                conse[conse[nums[i]].first].second = nums[i];
+            }
+            else
+            {
+                conse[nums[i]] = pair<int,int>(nums[i],conse[nums[i]+1].second);
+                conse[conse[nums[i]].second].first = nums[i];
+            }
+            maxLen = max(maxLen,conse[nums[i]].second-conse[nums[i]].first+1);
+        }
+        return maxLen;
+    }
+};

@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int findKthNumber(int n, int k) {
+        int cur = 1;
+        k--;
+        while (k > 0)
+        {
+            int numOfStep = calStep(n, cur, cur+1);
+            if (k >= numOfStep)
+            {
+                cur++;
+                k -= numOfStep;
+            }
+            else
+            {
+                cur *= 10;
+                k -= 1;
+            }
+        }
+        return cur;
+    }
+    int calStep (int n, long long n1, long long n2)
+    {
+        int num = 0;
+        while (n1 <= n)
+        {
+            num += min((long long)n+1, n2) - n1;
+            n1 *= 10;
+            n2 *= 10;
+        }
+        return num;
+    }
+};

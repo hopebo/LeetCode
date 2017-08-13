@@ -1,0 +1,24 @@
+class Solution {
+public:
+    static bool cmp(pair<int, int>& compare1, pair<int, int>& compare2)
+	{
+		return compare1.first < compare2.first;
+	}
+	int maxEnvelopes(vector<pair<int, int>>& envelopes) {
+		if (envelopes.empty())
+			return 0;
+		sort(envelopes.begin(), envelopes.end(), cmp);
+		int ans = 1, len = envelopes.size();
+		vector<int> dp(len, 1);
+		for (int i = 0; i < len; i++)
+		{
+			for (int j = 0; j < i; j++)
+			{
+				if (envelopes[j].first < envelopes[i].first && envelopes[j].second < envelopes[i].second)
+					dp[i] = max(dp[i], dp[j] + 1);
+			}
+			ans = max(ans, dp[i]);
+		}
+		return ans;
+	}
+};

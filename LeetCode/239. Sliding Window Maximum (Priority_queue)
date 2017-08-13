@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        if (nums.empty())
+			return vector<int>();
+		priority_queue<int> window;
+		priority_queue<int> waitdel;
+		vector<int> res;
+		for (int i = 0; i < k; i++)
+			window.push(nums[i]);
+		res.push_back(window.top());
+		for (int i = k; i < nums.size(); i++)
+		{
+			if (window.top() == nums[i-k])
+				window.pop();
+			else
+				waitdel.push(nums[i-k]);
+			while (!waitdel.empty() && waitdel.top() == window.top())
+			{
+				window.pop();
+				waitdel.pop();
+			}
+			window.push(nums[i]);
+			res.push_back(window.top());
+		}
+		return res;
+    }
+};

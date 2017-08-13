@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int kInversePairs(int n, int k) {
+        const int base = pow(10, 9) + 7;
+        vector<vector<int>> numOfPairs(n+1, vector<int>(k+1, 0));
+        for (int num = 1; num <= n; num++)
+        {
+            numOfPairs[num][0] = 1;
+            int pair_range = min(k, num*(num-1)/2);
+            long long val = 1;
+            for (int pair = 1; pair <= pair_range; pair++)
+            {
+                val = (val + base + numOfPairs[num-1][pair] - (pair-num >= 0 ? numOfPairs[num-1][pair-num] : 0)) % base;
+                numOfPairs[num][pair] = val;
+            }
+        }
+        return numOfPairs[n][k];
+    }
+};

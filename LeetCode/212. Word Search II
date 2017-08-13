@@ -1,0 +1,64 @@
+class Solution {
+public:
+	struct node {
+		string word;
+		node *letter[26];
+		node() {
+			word = "";
+			memset(letter, NULL, sizeof(node*) * 26);
+		}
+	};
+	node* buildtree(vector<string>& words)
+	{
+		node* root = new node;
+		node* p;
+		for (int i = 0; i < words.size(); i++)
+		{
+			p = root;
+			for (int j = 0; j < words[i].size(); j++)
+			{
+				if (p->letter[words[i][j] - 'a'] == NULL)
+					p->letter[words[i][j] - 'a'] = new node();
+				p = p->letter[words[i][j] - 'a'];
+			}
+			p->word = words[i];
+		}
+		return root;
+	}
+	void DFS(vector<vector<char>>& board, vector<string>& res, node* root, int i, int j, int row, int column)
+	{
+		char curLetter = board[i][j];
+		if (curLetter == '#' || root->letter[curLetter - 'a'] == NULL)
+			return;
+		root = root->letter[curLetter - 'a'];
+		if (root->word != "")
+		{
+			res.push_back(root->word);
+			root->word = "";
+		}
+		board[i][j] = '#';
+		if (i > 0)
+			DFS(board, res, root, i - 1, j, row, column);
+		if (j > 0)
+			DFS(board, res, root, i, j - 1, row, column);
+		if (i < row - 1)
+			DFS(board, res, root, i + 1, j, row, column);
+		if (j < column - 1)
+			DFS(board, res, root, i, j + 1, row, column);
+		board[i][j] = curLetter;
+		return;
+	}
+	vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+		vector<string> res;
+		if (board.empty() || words.empty())
+			return res;
+		int row = board.size(), column = board[0].size();
+		node *root = buildtree(words);
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < column; j++)
+				DFS(board, res, root, i, j, row, column);
+		}
+		return res;
+	}
+};

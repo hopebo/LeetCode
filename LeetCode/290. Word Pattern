@@ -1,0 +1,21 @@
+class Solution {
+public:
+    bool wordPattern(string pattern, string str) {
+        if (pattern.empty() && str.empty())
+			return true;
+		else if (pattern.empty() || str.empty())
+			return false;
+		map<char, int> dic1;
+		map<string, int> dic2;
+		istringstream in(str);
+		int i = 0;
+		for (string word; in >> word; i++)
+		{
+			if (i == pattern.size() || dic1[pattern[i]] != dic2[word])
+				return false;
+			if (dic1[pattern[i]] == 0)
+				dic1[pattern[i]] = dic2[word] = i + 1;
+		}
+		return i == pattern.size();
+    }
+};

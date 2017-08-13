@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int mySqrt(int x) {
+        if (x <= 0)
+            return 0;
+        int low = 1, high = x;
+        while(low <= high)
+        {
+            int mid = (high - low) / 2 + low;
+            int div = x / mid;
+            if (abs(div - mid) <= 1)
+            {
+                int ans = max(div,mid);
+                if (x/ans >= ans)
+                    return ans;
+                else
+                    return (ans - 1);
+            }
+            else
+            {
+                if (div > mid)
+                    low = mid + 1;
+                else
+                    high = mid - 1;
+            }
+        }
+    }
+};

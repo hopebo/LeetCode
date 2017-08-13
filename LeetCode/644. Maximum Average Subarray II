@@ -1,0 +1,40 @@
+class Solution {
+public:
+    double findMaxAverage(vector<int>& nums, int k) {
+        double max_val = INT_MIN, min_val = INT_MAX;
+        for (int num : nums)
+        {
+            max_val = max((double)num, max_val);
+            min_val = min((double)num, min_val);
+        }
+        double pre_mid = max_val, error = INT_MAX;
+        while (error >= 0.00001)
+        {
+            double mid = (max_val + min_val) / 2;
+            if (judge(nums, mid, k))
+                min_val = mid;
+            else
+                max_val = mid;
+            error = abs(mid - pre_mid);
+            pre_mid = mid;
+        }
+        return pre_mid;
+    }
+    bool judge(vector<int>& nums, double mid, int k)
+    {
+        double sum = 0, pre_sum = 0, pre_min = 0;
+        for (int i = 0; i < k; i++)
+            sum += nums[i] - mid;
+        if (sum >= 0)
+            return true;
+        for (int i = k; i < nums.size(); i++)
+        {
+            sum += nums[i] - mid;
+            pre_sum += nums[i - k] - mid;
+            pre_min = min(pre_sum, pre_min);
+            if (sum - pre_min >= 0)
+                return true;
+        }
+        return false;
+    }
+};

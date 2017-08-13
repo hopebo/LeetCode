@@ -1,0 +1,26 @@
+class Solution {
+public:
+    double myPow(double x, int n) {
+        int flag = 1;
+		double ans = 1;
+		if (n < 0)
+		{
+			flag = -1;
+			if (n == INT_MIN)
+			{
+				ans *= x;
+				n = -(n + 1);
+			}
+			else
+				n = -n;
+		}
+		for (; n != 0; x *= x ,n >>= 1)
+		{
+			if (n & 1)
+				ans *= x;
+		}
+		if (flag == -1)
+			ans = 1 / ans;
+		return ans;
+    }
+};

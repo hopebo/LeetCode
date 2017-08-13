@@ -1,0 +1,22 @@
+class Solution {
+public:
+    void wiggleSort(vector<int>& nums) {
+        int n = nums.size();
+		auto mptr = nums.begin() + n / 2;
+		nth_element(nums.begin(), mptr, nums.end());
+		int median = *mptr;
+		//index mapping
+		#define A(i) nums[(2*i+1) % (n | 1)]
+		int left = 0, i = 0, right = n - 1;
+		while (i <= right)
+		{
+			if (A(i) > median)
+				swap(A(i++), A(left++));
+			else if (A(i) < median)
+				swap(A(i), A(right--));
+			else
+				i++;
+		}
+		return;
+    }
+};
