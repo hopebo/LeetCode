@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int countPrimeSetBits(int L, int R) {
+        vector<bool> isPrime(33, true);
+        isPrime[0] = false;
+        isPrime[1] = false;
+        isPrime[2] = true;
+        int len  = isPrime.size();
+        for (int i = 2; i < len; ++i)
+        {
+            for (int j = 2; j <= i; ++j)
+            {
+                if (i * j < len)
+                {
+                    isPrime[i * j] = false;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        int res = 0;
+        for (int num = L; num <= R; ++num)
+        {
+            if (isPrime[GetNumOfSetBits(num)])
+            {
+                ++res;
+            }
+        }
+
+        return res;
+    }
+
+    int GetNumOfSetBits(int num)
+    {
+        int res = 0;
+        while (num > 0)
+        {
+            num &= (num - 1);
+            ++res;
+        }
+
+        return res;
+    }
+};
