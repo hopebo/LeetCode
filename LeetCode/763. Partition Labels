@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<int> partitionLabels(string S) {
+        unordered_map<char, pair<int, int>> letterRange;
+        for (int i = 0; i < S.size(); ++i)
+        {
+            if (letterRange.find(S[i]) != letterRange.end())
+            {
+                letterRange[S[i]].second = i;
+            }
+            else
+            {
+                letterRange[S[i]] = pair<int, int>(i, i);
+            }
+        }
+        
+        vector<pair<int, int>> ranges;
+        for (auto item : letterRange)
+        {
+            ranges.push_back(item.second);
+        }
+        
+        sort(ranges.begin(), ranges.end());
+        int start = ranges[0].first, end = ranges[0].second;
+        vector<int> res;
+        for (int i = 0; i < ranges.size(); ++i)
+        {
+            if (ranges[i].first <= end)
+            {
+                end = max(end, ranges[i].second);
+            }
+            else
+            {
+                res.push_back(end - start + 1);
+                start = ranges[i].first;
+                end = ranges[i].second;
+            }
+        }
+        
+        res.push_back(end - start + 1);
+        return res;
+    }
+};
