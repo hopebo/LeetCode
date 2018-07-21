@@ -1,0 +1,54 @@
+class Solution {
+public:
+    int orderOfLargestPlusSign(int N, vector<vector<int>>& mines) {
+        unordered_map<int, vector<int>> rowMines, colMines;
+        sort(mines.begin(), mines.end());
+        for (int i = 0; i < N; ++i)
+        {
+            rowMines[i].push_back(-1);
+            colMines[i].push_back(-1);
+        }
+        
+        for (int i = 0; i < mines.size(); ++i)
+        {
+            rowMines[mines[i][0]].push_back(mines[i][1]);
+            colMines[mines[i][1]].push_back(mines[i][0]);
+        }
+        
+        for (int i = 0; i < N; ++i)
+        {
+            rowMines[i].push_back(N);
+            colMines[i].push_back(N);
+        }
+        
+        int res = 0;
+        for (int i = 0; i < N; ++i)
+        {
+            for (int j = 0; j < N; ++j)
+            {
+                res = max(res, min(binarySearch(rowMines[i], j), binarySearch(colMines[j], i)));
+            }
+        }
+        
+        return res;
+    }
+    
+    int binarySearch(vector<int>& nums, int target)
+    {
+        int low = 0, high = (int)nums.size() - 1;
+        while (low + 1 < high)
+        {
+            int mid = low + (high - low) / 2;
+            if (target >= nums[mid])
+            {
+                low = mid;
+            }
+            else if (target <= nums[mid])
+            {
+                high = mid;
+            }
+        }
+        
+        return (target == nums[high] || target == nums[low]) ? 0 : min(nums[high] - target, target - nums[low]);
+    }
+};
