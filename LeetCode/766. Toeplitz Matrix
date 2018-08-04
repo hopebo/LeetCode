@@ -1,0 +1,28 @@
+class Solution {
+public:
+    bool isToeplitzMatrix(vector<vector<int>>& matrix) {
+        if (matrix.empty() || matrix[0].empty())
+        {
+            return true;
+        }
+        int m = matrix.size(), n = matrix[0].size();
+        for (int b = -m + 1; b <= n - 1; b++)
+        {
+            int low = max(0, -b);
+            int high = min(m - 1, n - 1 - b);
+            int target = 0;
+            for (int x = low; x <= high; x++)
+            {
+                if (x == low)
+                {
+                    target = matrix[x][x + b];
+                }
+                else if (target != matrix[x][x + b])
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+};
