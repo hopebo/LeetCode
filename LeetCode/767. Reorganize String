@@ -1,0 +1,43 @@
+// 先判断最多的字符数量是否大于其他字符的总和来判断是否可行，之后就是构造字符串。可以先定义好向量，然后填充字符。将最多字符和次多符依次间隔一个放置。
+class Solution {
+public:
+    string reorganizeString(string S) {
+        if (S.empty())
+        {
+            return S;
+        }
+        vector<pair<int, char>> letters;
+        for (int i = 0; i < 26; i++)
+        {
+            letters.push_back(pair<int, char>(0, 'a' + i));
+        }
+        for (int i = 0; i < S.size(); i++)
+        {
+            letters[S[i] - 'a'].first++;
+        }
+        sort(letters.begin(), letters.end(), greater<pair<int, char>>());
+        string res = "";
+        if ((int)S.size() < 2 * letters[0].first - 1)
+        {
+            return res;
+        }
+        int maximum = letters[0].first;
+        int left = (int)S.size() - maximum;
+        while (maximum > 0)
+        {
+            maximum--;
+            res.push_back(letters[0].second);
+            for (int i = 1; i < 26 && left > maximum - 1; i++)
+            {
+                if (letters[i].first <= 0)
+                {
+                    continue;
+                }
+                res.push_back(letters[i].second);
+                letters[i].first--;
+                left--;
+            }
+        }
+        return res;
+    }
+};
