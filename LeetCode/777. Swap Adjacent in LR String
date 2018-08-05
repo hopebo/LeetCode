@@ -1,0 +1,37 @@
+// 'L' 'R'的相对位置保持一致并且中间只包含'X',注意交换时'L'只能往左交换,'R'只能往右交换
+class Solution {
+public:
+    bool canTransform(string start, string end) {
+        int len = start.size();
+        int i = 0, j = 0;
+        while (i < len && j < len)
+        {
+            while (i < len && start[i] == 'X')
+            {
+                i++;
+            }
+            while (j < len && end[j] == 'X')
+            {
+                j++;
+            }
+            if (i < len && j < len)
+            {
+                if (start[i] != end[j] || (start[i] == 'L' && j > i) || (start[i] == 'R' && j < i))
+                {
+                    return false;
+                }
+                i++;
+                j++;
+            }
+        }
+        while (i < len && start[i] == 'X')
+        {
+            i++;
+        }
+        while (j < len && end[j] == 'X')
+        {
+            j++;
+        }
+        return i >= len && j >= len;
+    }
+};
