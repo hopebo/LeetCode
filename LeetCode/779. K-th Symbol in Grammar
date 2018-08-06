@@ -1,0 +1,26 @@
+// 位置k上的数仅有上一层k/2位置上的数和k%2余数决定
+class Solution {
+public:
+    int kthGrammar(int N, int K) {
+        vector<int> remain;
+        K--;
+        for (int i = 0; i < N - 1; i++)
+        {
+            remain.push_back(K & 1);
+            K >>= 1;
+        }
+        int res = 0;
+        for (int i = (int)remain.size() - 1; i >= 0; i--)
+        {
+            if (res == 0 && remain[i] == 0 || res == 1 && remain[i] == 1)
+            {
+                res = 0;
+            }
+            else
+            {
+                res = 1;
+            }
+        }
+        return res;
+    }
+};
