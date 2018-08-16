@@ -1,0 +1,34 @@
+// 用一个集合承载目标向量中的数，依次判断即可
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int numComponents(ListNode* head, vector<int>& G) {
+        set<int> Bag(G.begin(), G.end());
+        bool isConsecutive = false;
+        int res = 0;
+        while (head != NULL)
+        {
+            if (Bag.find(head->val) != Bag.end())
+            {
+                if (!isConsecutive)
+                {
+                    res++;
+                    isConsecutive = true;
+                }
+            }
+            else
+            {
+                isConsecutive = false;
+            }
+            head = head->next;
+        }
+        return res;
+    }
+};
