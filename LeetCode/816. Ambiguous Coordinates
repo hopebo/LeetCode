@@ -1,0 +1,77 @@
+// 根据分割字符串的首尾是否为'0'进行判断
+class Solution {
+public:
+    vector<string> ambiguousCoordinates(string S) {
+        vector<string> res;
+        int len = S.size();
+        if (len < 4)
+        {
+            return res;
+        }
+        S = S.substr(1, len - 2);
+        len -= 2;
+        for (int i = 1; i < len; i++)
+        {
+            vector<string> left = helper(S.substr(0, i));
+            if (left.empty())
+            {
+                continue;
+            }
+            vector<string> right = helper(S.substr(i));
+            if (!right.empty())
+            {
+                for (int j = 0; j < left.size(); j++)
+                {
+                    for (int k = 0; k < right.size(); k++)
+                    {
+                        string ans(1, '(');
+                        ans.append(left[j]);
+                        ans.append(", ");
+                        ans.append(right[k]);
+                        ans.append(")");
+                        res.push_back(ans);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+    
+    vector<string> helper(string S)
+    {
+        vector<string> res;
+        if (S.empty())
+        {
+            return res;
+        }
+        int len = S.size();
+        if (len == 1)
+        {
+            res.push_back(S);
+            return res;
+        }
+        if (S[0] == '0')
+        {
+            if (S[len - 1] != '0')
+            {
+                res.push_back(S.substr(0, 1) + "." + S.substr(1));
+            }
+        }
+        else
+        {
+            if (S[len - 1] == '0')
+            {
+                res.push_back(S);
+            }
+            else
+            {
+                for (int i = 1; i < len; i++)
+                {
+                    res.push_back(S.substr(0, i) + "." + S.substr(i));
+                }
+                res.push_back(S);
+            }
+        }
+        return res;
+    }
+};
