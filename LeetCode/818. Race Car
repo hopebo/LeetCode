@@ -1,0 +1,26 @@
+// DP算法，两种方式：一种是尽可能靠近后，反转方向走一定步数再反转。另一种是刚好超过后，反转。
+int dp[10005] = { 0 };
+class Solution {
+public:
+    int racecar(int target) {
+        if (dp[target] > 0)
+        {
+            return dp[target];
+        }
+        int m = floor(log2((double)target + 1));
+        int already = pow(2, m) - 1;
+        if (already == target)
+        {
+            dp[target] = m;
+            return dp[target];
+        }
+        int res = INT_MAX;
+        for (int i = 0; i < m; i++)
+        {
+            res = min(res, m + 1 + i + 1 + racecar(target - already + pow(2, i) - 1));
+        }
+        res = min(res, m + 1 + 1 + racecar(pow(2, m + 1) - 1 - target));
+        dp[target] = res;
+        return dp[target];
+    }
+};
