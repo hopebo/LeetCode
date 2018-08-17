@@ -1,0 +1,35 @@
+// 遍历字符串，分割单词
+class Solution {
+public:
+    string mostCommonWord(string paragraph, vector<string>& banned) {
+        set<string> banned_words(banned.begin(), banned.end());
+        map<string, int> freq;
+        paragraph.push_back(' ');
+        int len = paragraph.size();
+        int i = 0;
+        string matchLetters = "!?',;. ";
+        string res = "";
+        int maxFreq = 0;
+        while (i < len)
+        {
+            int j = paragraph.find_first_of(matchLetters, i);
+            string word = ToLower(paragraph.substr(i, j - i));
+            if (!word.empty() && banned_words.find(word) == banned_words.end())
+            {
+                if (++freq[word] > maxFreq)
+                {
+                    res = word;
+                    maxFreq = freq[word];
+                }
+            }
+            i = j + 1;
+        }
+        return res;
+    }
+    
+    string ToLower(string word)
+    {
+        transform(word.begin(), word.end(), word.begin(), [](unsigned char c) { return tolower(c); });
+        return word;
+    }
+};
