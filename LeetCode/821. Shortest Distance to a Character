@@ -1,0 +1,33 @@
+// 两次前后遍历，找到里每个字符最近的给定字符C即可
+class Solution {
+public:
+    vector<int> shortestToChar(string S, char C) {
+        vector<int> res(S.size(), INT_MAX);
+        int lastIndex = -1;
+        for (int i = 0; i < S.size(); i++)
+        {
+            if (S[i] == C)
+            {
+                lastIndex = i;
+                res[i] = 0;
+            }
+            else if (lastIndex != -1)
+            {
+                res[i] = i - lastIndex;
+            }
+        }
+        lastIndex = -1;
+        for (int i = (int)S.size() - 1; i >= 0; i--)
+        {
+            if (S[i] == C)
+            {
+                lastIndex = i;
+            }
+            else if (lastIndex != -1)
+            {
+                res[i] = min(res[i], lastIndex - i);
+            }
+        }
+        return res;
+    }
+};
