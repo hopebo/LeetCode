@@ -1,0 +1,30 @@
+// 用string流处理比较方便
+class Solution {
+public:
+    string toGoatLatin(string S) {
+        istringstream in(S);
+        string word;
+        string res = "";
+        int i = 1;
+        set<char> vowel{ 'a', 'e', 'i', 'o', 'u'};
+        while (in >> word)
+        {
+            string temp = "";
+            if (vowel.count(tolower(word[0])))
+            {
+                temp = word;
+            }
+            else
+            {
+                temp = word.substr(1);
+                temp.push_back(word[0]);
+            }
+            temp.append("ma");
+            temp.append(string(i, 'a'));
+            res.push_back(' ');
+            res.append(temp);
+            i++;
+        }
+        return res.substr(1);
+    }
+};
