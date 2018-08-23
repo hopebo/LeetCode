@@ -1,0 +1,37 @@
+// 使用动态规划的思想，以某一个数为根的树的数量依赖于以它的因子为根的子树数量
+int base = 1e9 + 7;
+class Solution {
+public:
+    int numFactoredBinaryTrees(vector<int>& A) {
+        sort(A.begin(), A.end());
+        map<int, int> subtree;
+        for (int i = 0; i < A.size(); i++)
+        {
+            long long temp = 0;
+            for (int j = 0; j < i && A[j] <= sqrt(A[i]); j++)
+            {
+                int quotient = A[i] / A[j];
+                int remainder = A[i] % A[j];
+                if (remainder == 0 && subtree.find(quotient) != subtree.end())
+                {
+                    if (quotient == A[j])
+                    {
+                        temp = (temp + (long long)subtree[quotient] * subtree[quotient]) % base;
+                    }
+                    else
+                    {
+                        temp = (temp + 2 * (long long)subtree[quotient] * subtree[A[j]]) % base;
+                    }
+                }
+            }
+            temp++;
+            subtree[A[i]] = temp;
+        }
+        long long res = 0;
+        for (map<int, int>::iterator it = subtree.begin(); it != subtree.end(); it++)
+        {
+            res = (res + it->second) % base;
+        }
+        return res;
+    }
+};
