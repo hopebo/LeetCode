@@ -1,0 +1,71 @@
+// 既然是改变一个'0'来连接周围的岛屿，那么就要以'0'为核心构建数据结构，存储下可能成为连接点的'0'周围的岛屿面积
+int dir[4][2] = { {-1, 0}, {1,  0}, {0, -1}, {0, 1} };
+class Solution {
+private:
+    int m;
+    int n;
+public:
+    int largestIsland(vector<vector<int>>& grid) {
+        m = grid.size();
+        n = grid[0].size();
+        map<pair<int, int>, vector<int>> connects;
+        int res = 1;
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (grid[i][j] == 1)
+                {
+                    int size = 0;
+                    set<pair<int, int>> contour;
+                    findIsland(grid, size, i, j, contour);
+                    for (auto it = contour.begin(); it != contour.end(); it++)
+                    {
+                        connects[*it].push_back(size);
+                    }
+                    if (contour.empty())
+                    {
+                        res = max(res, size);
+                    }
+                }
+            }
+        }
+        for (auto it = connects.begin(); it != connects.end(); it++)
+        {
+            int temp = sum(it->second) + 1;
+            res = max(res, temp);
+        }
+        return res;
+    }
+    void findIsland(vector<vector<int>>& grid, int& size, int x, int y, set<pair<int, int>>& contour)
+    {
+        size++;
+        grid[x][y] = -1;
+        for (int k = 0; k < 4; k++)
+        {
+            int i = x + dir[k][0];
+            int j = y + dir[k][1];
+            if (i < 0 || j < 0 || i >= m || j >= n)
+            {
+                continue;
+            }
+            else if (grid[i][j] == 0)
+            {
+                contour.insert(pair<int, int>(i, j));
+            }
+            else if (grid[i][j] == 1)
+            {
+                findIsland(grid, size, i, j, contour);
+            }
+        }
+    }
+    int sum(vector<int>& nums)
+    {
+        int res = 0;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            res += nums[i];
+        }
+        return res;
+    }
+};
