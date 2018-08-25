@@ -1,4 +1,5 @@
 // 一步到位，PostOrder通过记录到每个点的具体信息来叠加
+// 答案有更好的方法，通过记录每个节点子树结点数量，以及到根结点距离的sum。在第二次进行深度优先搜索时，就能够根据两边结点数量快速计算。
 class Solution {
 public:
     vector<int> sumOfDistancesInTree(int N, vector<vector<int>>& edges) {
