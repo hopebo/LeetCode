@@ -1,0 +1,55 @@
+// 一步到位，PostOrder通过记录到每个点的具体信息来叠加
+class Solution {
+public:
+    vector<int> sumOfDistancesInTree(int N, vector<vector<int>>& edges) {
+        map<int, vector<int>> connect;
+        for (int i = 0; i < edges.size(); i++)
+        {
+            connect[edges[i][0]].push_back(edges[i][1]);
+            connect[edges[i][1]].push_back(edges[i][0]);
+        }
+        set<int> visited;
+        vector<int> res(N, 0);
+        helper(0, visited, connect, res);
+        return res;
+    }
+    vector<pair<int, int>> helper(int index, set<int>& visited, map<int, vector<int>>& connect, vector<int>& res)
+    {
+        vector<pair<int, int>> ans;
+        visited.insert(index);
+        vector<vector<pair<int, int>>> temp;
+        for (int i = 0; i < connect[index].size(); i++)
+        {
+            if (visited.count(connect[index][i]))
+            {
+                continue;
+            }
+            temp.push_back(helper(connect[index][i], visited, connect, res));
+        }
+        for (int i = 0; i < temp.size(); i++)
+        {
+            for (int j = i + 1; j < temp.size(); j++)
+            {
+                for (int k = 0; k < temp[i].size(); k++)
+                {
+                    for (int l = 0; l < temp[j].size(); l++)
+                    {
+                        res[temp[i][k].first] += temp[i][k].second + temp[j][l].second;
+                        res[temp[j][l].first] += temp[i][k].second + temp[j][l].second;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < temp.size(); i++)
+        {
+            for (int j = 0; j < temp[i].size(); j++)
+            {
+                res[index] += temp[i][j].second;
+                res[temp[i][j].first] += temp[i][j].second;
+                ans.push_back(pair<int, int>(temp[i][j].first, temp[i][j].second + 1));
+            }
+        }
+        ans.push_back(pair<int, int>(index, 1));
+        return ans;
+    }
+};
