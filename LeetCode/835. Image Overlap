@@ -1,0 +1,24 @@
+// 通过Map记录向量中同为1的点重合需要移动的方式，注意让行差别乘以大于等于2N-1的数以使不同的变换整形数肯定不同
+class Solution {
+public:
+    int largestOverlap(vector<vector<int>>& A, vector<vector<int>>& B) {
+        int N = A.size();
+        map<int, int> bag;
+        for (int i = 0; i < N * N; i++)
+        {
+            for (int j = 0; j < N * N; j++)
+            {
+                if (A[i / N][i % N] && B[j / N][j % N])
+                {
+                    bag[(i / N - j / N) * 100 + (i % N) - (j % N)]++;
+                }
+            }
+        }
+        int res = 0;
+        for (auto it : bag)
+        {
+            res = max(res, it.second);
+        }
+        return res;
+    }
+};
