@@ -1,0 +1,45 @@
+// brute force的方式进行判断即可
+class Solution {
+public:
+    int numMagicSquaresInside(vector<vector<int>>& grid) {
+        if (grid.size() < 3 || grid[0].size() < 3) {
+            return 0;
+        }
+        int row = grid.size(), col = grid[0].size();
+        int ans = 0;
+        for (int i = 0; i < row - 2; i++) {
+            for (int j = 0; j < col - 2; j++) {
+                if (isMagic(grid, i, j)) {
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+    bool isMagic(vector<vector<int>>& grid, int row, int col) {
+        int sum[8] = { 0 };
+        set<int> digits;
+        for (int i = row; i < row + 3; i++) {
+            for (int j = col; j < col + 3; j++) {
+                if (grid[i][j] < 1 || grid[i][j] > 9 || digits.count(grid[i][j])) {
+                    return false;
+                }
+                digits.insert(grid[i][j]);
+                sum[i - row] += grid[i][j];
+                sum[j - col + 3] += grid[i][j];
+                if (i - row == j - col) {
+                    sum[6] += grid[i][j];
+                }
+                if (i - row + j - col == 2) {
+                    sum[7] += grid[i][j];
+                }
+            }
+        }
+        for (int i = 0; i < 7; i++) {
+            if (sum[i] != sum[i + 1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
