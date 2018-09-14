@@ -1,0 +1,17 @@
+// Normal DFS Problem
+class Solution {
+public:
+    bool canVisitAllRooms(vector<vector<int>>& rooms) {
+        set<int> visited;
+        helper(rooms, visited, 0);
+        return visited.size() == rooms.size();
+    }
+    void helper(vector<vector<int>>& rooms, set<int>& visited, int cur) {
+        visited.insert(cur);
+        for (int i = 0; i < rooms[cur].size(); i++) {
+            if (!visited.count(rooms[cur][i])) {
+                helper(rooms, visited, rooms[cur][i]);
+            }
+        }
+    }
+};
