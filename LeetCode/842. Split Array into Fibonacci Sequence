@@ -1,0 +1,66 @@
+// 根据前两个元素的不同，循环判断
+class Solution {
+public:
+    vector<int> splitIntoFibonacci(string S) {
+        if (S.size() < 3) {
+            return vector<int>();
+        }
+        for (int i = 1; i < 11; i++) {
+            for (int j = 1; j < min((int)S.size() - i, 11); j++) {
+                if (i != 1 && S[0] == '0' || j != 1 && S[i] == '0') {
+                    continue;
+                }
+                vector<int> ans;
+                if (canSplit(S, i, j, ans)) {
+                    return ans;
+                }
+            }
+        }
+        return vector<int>();
+    }
+    bool canSplit(string& S, int len1, int len2, vector<int>& ans) {
+        string prev = S.substr(0, len1);
+        long long prev_num = stoll(prev);
+        if (prev_num > (long long)INT_MAX) {
+            return false;
+        }
+        ans.push_back(prev_num);
+        string cur = S.substr(len1, len2);
+        long long cur_num = stoll(cur);
+        if (cur_num > (long long)INT_MAX) {
+            return false;
+        }
+        ans.push_back(cur_num);
+        int next_pos = len1 + len2;
+        while (next_pos < S.size()) {
+            string next = add(prev, cur);
+            long long next_num = stoll(next);
+            if (next_num > (long long)INT_MAX) {
+                return false;
+            }
+            ans.push_back(next_num);
+            if (S.substr(next_pos, next.size()) != next) {
+                return false;
+            }
+            prev = cur;
+            cur = next;
+            next_pos += next.size();
+        }
+        return true;
+    }
+    string add(string s1, string s2) {
+        string ans = "";
+        int i = (int)s1.size() - 1;
+        int j = (int)s2.size() - 1;
+        int cf = 0;
+        while (i >= 0 || j >= 0 || cf != 0) {
+            int num1 = i >= 0 ? s1[i] - '0' : 0;
+            i--;
+            int num2 = j >= 0 ? s2[j] - '0' : 0;
+            j--;
+            ans.push_back(((num1 + num2 + cf) % 10) + '0');
+            cf = (num1 + num2 + cf) / 10;
+        }
+        return string(ans.rbegin(), ans.rend());
+    }
+};
