@@ -1,0 +1,40 @@
+// 我的方法是模拟传播，也可以用区间的方式，或者计算左右力大小的方式
+class Solution {
+public:
+    string pushDominoes(string dominoes) {
+        if (dominoes.empty()) {
+            return dominoes;
+        }
+        char state[2] = {'L', 'R'};
+        map<char, int> index = {{'L', 0}, {'R', 1}};
+        queue<int> pos;
+        for (int i = 0; i < dominoes.size(); i++) {
+            if (dominoes[i] != '.') {
+                pos.push(i);
+            }
+        }
+        while (!pos.empty()) {
+            map<int, char> change;
+            while (!pos.empty()) {
+                int front = pos.front();
+                pos.pop();
+                int next_pos = dominoes[front] == 'L' ? front - 1 : front + 1;
+                if (next_pos < 0 || next_pos >= dominoes.size() || dominoes[next_pos] != '.') {
+                    continue;
+                }
+                if (change.count(next_pos)) {
+                    change[next_pos] = '.';
+                } else {
+                    change[next_pos] = dominoes[front];
+                }
+            }
+            for (auto it : change) {
+                dominoes[it.first] = it.second;
+                if (it.second != '.') {
+                    pos.push(it.first);
+                }
+            }
+        }
+        return dominoes;
+    }
+};
