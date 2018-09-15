@@ -1,0 +1,38 @@
+// 这个题目并没有太多的技巧和最短路径的方法，任何情况下都有可能，所以用BFS。探讨从每个点出发的可能性。
+class Solution {
+public:
+    int shortestPathLength(vector<vector<int>>& graph) {
+        if (graph.empty()) {
+            return 0;
+        }
+        int N = graph.size();
+        queue<pair<int, int>> state;
+        set<pair<int, int>> visited;
+        for (int i = 0; i < N; i++) {
+            pair<int, int> start(1 << i, i);
+            state.push(start);
+            visited.insert(start);
+        }
+        int step = 0;
+        while (!state.empty()) {
+            int len = state.size();
+            for (int i = 0; i < len; i++) {
+                pair<int, int> cur = state.front();
+                state.pop();
+                if (cur.first == (1 << N) - 1) {
+                    return step;
+                }
+                for (int j = 0; j < graph[cur.second].size(); j++) {
+                    pair<int, int> next(cur.first | (1 << graph[cur.second][j]), graph[cur.second][j]);
+                    if (visited.count(next)) {
+                        continue;
+                    }
+                    visited.insert(next);
+                    state.push(next);
+                }
+            }
+            step++;
+        }
+        return -1;
+    }
+};
