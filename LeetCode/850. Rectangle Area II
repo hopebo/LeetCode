@@ -1,0 +1,36 @@
+// 针对y轴坐标进行扫描
+long long base = 1e9 + 7;
+class Solution {
+public:
+    int rectangleArea(vector<vector<int>>& rectangles) {
+        map<int, int> x_map;
+        vector<vector<int>> events;
+        for (auto rectangle : rectangles) {
+            x_map[rectangle[0]] = 0;
+            x_map[rectangle[2]] = 0;
+            events.push_back(vector<int>{rectangle[1], rectangle[0], rectangle[2], 1});
+            events.push_back(vector<int>{rectangle[3], rectangle[0], rectangle[2], -1});
+        }
+        vector<pair<int, int>> x_pos;   // x and count
+        for (auto& it : x_map) {
+            it.second = x_pos.size();
+            x_pos.push_back(pair<int, int>(it.first, 0));
+        }
+        sort(events.begin(), events.end());
+        long long sum = 0, prev_y = INT_MIN, cur_line = 0;
+        for (auto event : events) {
+            sum = (sum + (event[0] - prev_y) * cur_line) % base;
+            prev_y = event[0];
+            for (int i = x_map[event[1]]; i < x_map[event[2]]; i++) {
+                x_pos[i].second += event[3];
+            }
+            cur_line = 0;
+            for (int i = 0; i < x_pos.size(); i++) {
+                if (x_pos[i].second > 0) {
+                    cur_line += x_pos[i + 1].first - x_pos[i].first;
+                }
+            }
+        }
+        return sum;
+    }
+};
