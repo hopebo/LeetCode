@@ -1,0 +1,30 @@
+// 带记忆的DFS方法
+class Solution {
+public:
+    vector<int> loudAndRich(vector<vector<int>>& richer, vector<int>& quiet) {
+        int N = quiet.size();
+        vector<int> prev(N, -1);
+        vector<vector<int>> rich(N);
+        for (int i = 0; i < richer.size(); i++) {
+            rich[richer[i][1]].push_back(richer[i][0]);
+        }
+        for (int i = 0; i < N; i++) {
+            helper(prev, rich, quiet, i);
+        }
+        return prev;
+    }
+    int helper(vector<int>& prev, vector<vector<int>>& rich, vector<int>& quiet, int index) {
+        if (prev[index] != -1) {
+            return prev[index];
+        }
+        int ans = index;
+        for (int i = 0; i < rich[index].size(); i++) {
+            int temp = helper(prev, rich, quiet, rich[index][i]);
+            if (quiet[temp] < quiet[ans]) {
+                ans = temp;
+            }
+        }
+        prev[index] = ans;
+        return prev[index];
+    }
+};
