@@ -1,0 +1,22 @@
+// 用栈来模拟碰撞的过程，栈中存的元素为车辆抵达终点的时间。后车追上前车后以前车较慢的速度前进。
+class Solution {
+public:
+    int carFleet(int target, vector<int>& position, vector<int>& speed) {
+        int N = position.size();
+        if (N < 2) {
+            return N;
+        }
+        vector<pair<int, double>> state;
+        for (int i = 0; i < N; i++) {
+            state.push_back(pair<int, double>(position[i], ((double)target - position[i]) / speed[i]));
+        }
+        sort(state.begin(), state.end(), greater<pair<int, double>>());
+        stack<double> time;
+        for (int i = 0; i < N; i++) {
+            if (time.empty() || state[i].second > time.top()) {
+                time.push(state[i].second);
+            }
+        }
+        return time.size();
+    }
+};
