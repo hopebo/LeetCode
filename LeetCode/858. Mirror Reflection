@@ -1,0 +1,34 @@
+// 我采用的是模拟过程的方法，通过求最小公倍数的方法更简单
+class Solution {
+public:
+    int mirrorReflection(int p, int q) {
+        int h = q, round = 1, sign = 1;
+        while (h != p && h != 0) {
+            if (sign > 0) {
+                while (h + q <= p) {
+                    h += q;
+                    round++;
+                }
+                if (h < p) {
+                    h = 2 * p - q - h;
+                    round++;
+                }
+            } else if (sign < 0) {
+                while (h - q >= 0) {
+                    h -= q;
+                    round++;
+                }
+                if (h > 0) {
+                    h = q - h;
+                    round++;
+                } 
+            }
+            sign = -sign;
+        }
+        if (h == 0) {
+            return 0;
+        } else {
+            return round % 2 ? 1 : 2;
+        }
+    }
+};
