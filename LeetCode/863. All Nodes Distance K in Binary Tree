@@ -1,0 +1,84 @@
+// 先找到目标节点在树中的位置，然后对其根节点和本身进行层序遍历
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int K) {
+        vector<TreeNode*> res;
+        vector<TreeNode*> path;
+        search(path, root, target);
+        int len = path.size();
+        for (int i = max(0, len - 1 - K); i < len; i++) {
+            if (i == len - 1 - K) {
+                res.push_back(path[i]);
+            } else if (i < len - 1) {
+                vector<TreeNode*> temp;
+                if (path[i + 1] == path[i]->left) {
+                    temp = BFS(path[i]->right, K - len + i);
+                } else {
+                    temp = BFS(path[i]->left, K - len + i);
+                }
+                res.insert(res.end(), temp.begin(), temp.end());
+            } else {
+                auto temp = BFS(path[i], K);
+                res.insert(res.end(), temp.begin(), temp.end());
+            }
+        }
+        vector<int> ans;
+        for (auto node : res) {
+            ans.push_back(node->val);
+        }
+        return ans;
+    }
+    bool search(vector<TreeNode*>& path, TreeNode* root, TreeNode* target) {
+        if (root == NULL) {
+            return false;
+        }
+        path.push_back(root);
+        if (root == target) {
+            return true;
+        }
+        if (search(path, root->left, target)) {
+            return true;
+        }
+        if (search(path, root->right, target)) {
+            return true;
+        }
+        path.pop_back();
+        return false;
+    }
+    vector<TreeNode*> BFS(TreeNode* root, int K) {
+        vector<TreeNode*> res;
+        queue<TreeNode*> cur;
+        if (root == NULL) {
+            return res;
+        }
+        cur.push(root);
+        while (K > 0 && !cur.empty()) {
+            int len = cur.size();
+            for (int i = 0; i < len; i++) {
+                TreeNode* temp = cur.front();
+                cur.pop();
+                if (temp->left) {
+                    cur.push(temp->left);
+                }
+                if (temp->right) {
+                    cur.push(temp->right);
+                }
+            }
+            K--;
+        }
+        while (!cur.empty()) {
+            res.push_back(cur.front());
+            cur.pop();
+        }
+        return res;
+    }
+};
