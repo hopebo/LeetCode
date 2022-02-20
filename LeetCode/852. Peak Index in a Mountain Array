@@ -1,0 +1,16 @@
+// 用二分查找的方法，根据中间元素与前面元素的大小关系进行范围判断
+class Solution {
+public:
+    int peakIndexInMountainArray(vector<int>& A) {
+        int low = 0, high = (int)A.size() - 2;
+        while (low < high) {
+            int mid = low + ceil((high - low) / 2.0);
+            if (A[mid] > A[mid - 1]) {
+                low = mid;
+            } else {
+                high = mid - 1;
+            }
+        }
+        return low;
+    }
+};

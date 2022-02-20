@@ -1,0 +1,12 @@
+// 从后往前遍历，偏移次数可积累。
+class Solution {
+public:
+    string shiftingLetters(string S, vector<int>& shifts) {
+        int len = S.size(), count = 0;
+        for (int i = len - 1; i >= 0; i--) {
+            count = (count + shifts[i]) % 26;
+            S[i] = (S[i] + count - 'a') % 26 + 'a';
+        }
+        return S;
+    }
+};

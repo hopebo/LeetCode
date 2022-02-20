@@ -1,0 +1,25 @@
+// 使用Deque滑窗的方法
+class Solution {
+public:
+    int shortestSubarray(vector<int>& A, int K) {
+        int sum = 0;
+        vector<int> B(1, 0);
+        deque<int> index;
+        for (int num : A) {
+            sum += num;
+            B.push_back(sum);
+        }
+        int res = INT_MAX;
+        for (int i = 0; i < B.size(); i++) {
+            while (!index.empty() && B[i] - B[index.front()] >= K) {
+                res = min(res, i - index.front());
+                index.pop_front();
+            }
+            while (!index.empty() && B[i] <= B[index.back()]) {
+                index.pop_back();
+            }
+            index.push_back(i);
+        }
+        return res == INT_MAX ? -1 : res;
+    }
+};

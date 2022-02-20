@@ -1,0 +1,66 @@
+// 字符串处理的基本问题
+class Solution {
+public:
+    string maskPII(string S) {
+        int index = 0;
+        if ((index = S.find('@')) != string::npos)
+        {
+            return maskEmail(S, index);
+        }
+        else
+        {
+            return maskNumber(S);
+        }
+    }
+    string maskEmail(string S, int index)
+    {
+        transform(S.begin(), S.end(), S.begin(), [](unsigned char c) { return tolower(c); });
+        string res = "";
+        res.push_back(S[0]);
+        res.append("*****");
+        res.push_back(S[index - 1]);
+        res.append(S.substr(index));
+        return res;
+    }
+    string maskNumber(string S)
+    {
+        string res = "";
+        int len = S.size();
+        int count = 0;
+        for (int i = len - 1; i >= 0; i--)
+        {
+            if (S[i] >= '0' && S[i] <= '9')
+            {
+                count++;
+                if (count > 4 && count < 11)
+                {
+                    continue;
+                }
+                else
+                {
+                    if (count <= 4)
+                    {
+                        res.push_back(S[i]);
+                        if (count == 4)
+                        {
+                            res.append("-***-***");
+                        }    
+                    }
+                    else if (count >= 11)
+                    {
+                        if (count == 11)
+                        {
+                            res.push_back('-');
+                        }
+                        res.push_back('*');
+                    }
+                }
+            }
+        }
+        if (res.size() > 12)
+        {
+            res.push_back('+');
+        }
+        return string(res.rbegin(), res.rend());
+    }
+};

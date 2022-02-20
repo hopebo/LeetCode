@@ -1,0 +1,61 @@
+// 可以在大循环中用小循环在字符串中快速移动到需要比较的实际存在的位置
+class Solution {
+public:
+    bool backspaceCompare(string S, string T) {
+        int i = (int)S.size() - 1, j = (int)T.size() - 1;
+        int SB = 0, ST = 0;
+        while (i >= 0 || j >= 0) {
+            if (i >= 0 && j >= 0) {
+                if (S[i] != '#' && T[j] != '#' && SB == 0 && ST == 0) {
+                    if (S[i] != T[j]) {
+                        return false;
+                    }
+                    i--;
+                    j--;
+                }
+                else {
+                    if (S[i] == '#') {
+                        SB++;
+                        i--;
+                    } else if (SB > 0) {
+                        SB--;
+                        i--;
+                    }
+                    if (T[j] == '#') {
+                        ST++;
+                        j--;
+                    } else if (ST > 0) {
+                        ST--;
+                        j--;
+                    }
+                }
+            } else {
+                if (i >= 0) {
+                    if (S[i] != '#' && SB == 0) {
+                        return false;
+                    } else {
+                        if (S[i] == '#') {
+                            SB++;
+                        } else if (SB > 0) {
+                            SB--;
+                        }
+                    }
+                    i--;
+                }
+                if (j >= 0) {
+                    if (T[j] != '#' && ST == 0) {
+                        return false;
+                    } else {
+                        if (T[j] == '#') {
+                            ST++;
+                        } else if (ST > 0) {
+                            ST--;
+                        }
+                    }
+                    j--;
+                }
+            }
+        }
+        return true;
+    }
+};

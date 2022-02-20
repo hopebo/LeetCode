@@ -1,0 +1,42 @@
+// 使用并查集时，在每次查找到parent节点后要进行更新，优化下一次查找
+class Solution {
+public:
+    int numSimilarGroups(vector<string>& A) {
+        if (A.size() < 2) {
+            return A.size();
+        }
+        vector<int> parents(A.size());
+        iota(parents.begin(), parents.end(), 0);
+        int ans = A.size();
+        for (int i = 0; i < A.size(); i++) {
+            for (int j = i + 1; j < A.size(); j++) {
+                if (isSimilar(A[i], A[j])) {
+                    int pi = findParent(parents, i);
+                    int pj = findParent(parents, j);
+                    if (pi != pj) {
+                        ans--;
+                        parents[pi] = pj;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+    int findParent(vector<int>& parents, int i) {
+        if (parents[i] != i) {
+            parents[i] = findParent(parents, parents[i]);
+        }
+        return parents[i];
+    }
+    bool isSimilar(string& a, string& b)
+    {
+        int diff = 0, i = 0;
+        while (diff <= 2 && i < a.size()) {
+            if (a[i] != b[i]) {
+                diff++;
+            }
+            i++;
+        }
+        return diff <= 2;
+    }
+};

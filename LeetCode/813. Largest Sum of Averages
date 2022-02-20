@@ -1,0 +1,30 @@
+// 动态规划，要注意只划分一次的特殊情况，因为划分结果必须包含所有元素
+class Solution {
+public:
+    double largestSumOfAverages(vector<int>& A, int K) {
+        int len = A.size();
+        vector<vector<double>> dp(K + 1, vector<double>(len + 1, 0.0));
+        vector<int> sum;
+        int temp_sum = 0;
+        for (int i = 0; i < len; i++)
+        {
+            temp_sum += A[i];
+            sum.push_back(temp_sum);
+        }
+        for (int i = 1; i <= K; i++)
+        {
+            for (int j = 1; j <= len; j++)
+            {
+                for (int k = 1; k <= j; k++)
+                {
+                    dp[i][j] = max(dp[i][j], dp[i - 1][k - 1] + ((double)sum[j - 1] - (k - 2 < 0 ? 0 : sum[k - 2])) / (j - k + 1));
+                    if (i == 1)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        return dp[K][len];
+    }
+};

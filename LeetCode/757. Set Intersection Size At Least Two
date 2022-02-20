@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int intersectionSizeTwo(vector<vector<int>>& intervals) {
+        int res = 0;
+        sort(intervals.begin(), intervals.end(), [] (const vector<int>& v1, const vector<int>& v2)
+             { return v1[0] < v2[0] || v1[0] == v2[0] && v1[1] > v2[1]; });
+        int len = intervals.size();
+        vector<int> need(len, 2);
+        for (int i = len - 1; i >= 0; --i)
+        {
+            int target = 0;
+            if (need[i] <= 0) 
+            {
+                continue;
+            }
+            else if (need[i] == 1)
+            {
+                target = intervals[i][0];
+            }
+            else if (need[i] == 2)
+            {
+                target = intervals[i][0] + 1;
+            } 
+
+            res += need[i];
+            for (int j = i - 1; j >= 0; --j)
+            {
+                if (need[j] > 0 && intervals[j][1] >= intervals[i][0])
+                {
+                    need[j] -= (min(intervals[j][1], target) - intervals[i][0] + 1);
+                }
+            }
+        }
+
+        return res;
+    }
+};

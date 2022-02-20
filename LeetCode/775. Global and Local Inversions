@@ -1,0 +1,18 @@
+// 只有当非相邻间隔的数字发生交换时才会导致local和global不同
+class Solution {
+public:
+    bool isIdealPermutation(vector<int>& A) {
+        if (A.size() < 3)
+        {
+            return true;
+        }
+        for (int i = 0; i < A.size(); i++)
+        {
+            if (abs(A[i] - i) > 1)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+};

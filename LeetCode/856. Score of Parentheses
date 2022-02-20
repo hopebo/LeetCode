@@ -1,0 +1,27 @@
+// 分治法；栈方法；core方法
+class Solution {
+public:
+    int scoreOfParentheses(string S) {
+        if (S.empty()) {
+            return 0;
+        }
+        int res = 0;
+        int balance = 0, begin = 0;
+        for (int i = 0; i < S.size(); i++) {
+            if (S[i] == '(') {
+                balance++;
+            } else {
+                balance--;
+                if (balance == 0) {
+                    if (i == begin + 1) {
+                        res += 1;
+                    } else {
+                        res += 2 * scoreOfParentheses(S.substr(begin + 1, i - begin - 1));
+                    }
+                    begin = i + 1;
+                }
+            }
+        }
+        return res;
+    }
+};

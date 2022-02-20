@@ -1,0 +1,32 @@
+// 动态规划记录在变换的过程中达到某个点的概率
+class Solution {
+public:
+    double new21Game(int N, int K, int W) {
+        if (K == 0)
+        {
+            return 1.0;
+        }
+        if (N >= K - 1 + W)
+        {
+            return 1.0;
+        }
+        if (N < K)
+        {
+            return 0;
+        }
+        vector<double> dp(K + W, 0.0);
+        dp[0] = 1;
+        for (int i = 1; i < K + W; i++)
+        {
+            if (i <= K)
+            {
+                dp[i] = dp[i - 1] + (dp[i - 1] - (i - W - 1 >= 0 ? dp[i - W - 1] : 0)) / W;
+            }
+            else
+            {
+                dp[i] = dp[i - 1] + (dp[K - 1] - (i - W - 1 >= 0 ? dp[i - W - 1] : 0)) / W;
+            }
+        }
+        return dp[N] - dp[K - 1];
+    }
+};

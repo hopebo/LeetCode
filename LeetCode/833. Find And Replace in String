@@ -1,0 +1,29 @@
+// 字符串处理问题
+class Solution {
+public:
+    string findReplaceString(string S, vector<int>& indexes, vector<string>& sources, vector<string>& targets) {
+        map<int, pair<int, int>> replace;
+        int len = indexes.size();
+        for (int i = 0; i < len; i++)
+        {
+            if (helper(S, indexes[i], sources[i]))
+            {
+                replace[indexes[i]] = pair<int, int>(sources[i].size(), i);
+            }
+        }
+        string res = "";
+        int start = 0;
+        for (auto it = replace.begin(); it != replace.end(); it++)
+        {
+            res.append(S.substr(start, it->first - start));
+            res.append(targets[it->second.second]);
+            start = it->first + it->second.first;
+        }
+        res.append(S.substr(start));
+        return res;
+    }
+    bool helper(string& S, int index, string& source)
+    {
+        return ((int)S.size() - index >= source.size()) && S.substr(index, (int)source.size()) == source;
+    }
+};

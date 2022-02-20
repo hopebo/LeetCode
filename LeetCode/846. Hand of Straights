@@ -1,0 +1,26 @@
+// 模拟过程，依次从最小的数开始组合
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int W) {
+        if (hand.size() < W || (hand.size() % W)) {
+            return false;
+        }
+        map<int, int> nums;
+        for (auto num : hand) {
+            nums[num]++;
+        }
+        for (auto it = nums.begin(); it != nums.end(); it++) {
+            int times = it->second;
+            if (times == 0) {
+                continue;
+            }
+            for (int num = it->first; num < it->first + W; num++) {
+                if (!nums.count(num) || nums[num] < times) {
+                    return false;
+                }
+                nums[num] -= times;
+            }
+        }
+        return true;
+    }
+};

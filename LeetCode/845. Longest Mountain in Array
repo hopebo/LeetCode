@@ -1,0 +1,26 @@
+// 顺序遍历查找符合条件的结构即可，注意前一符合结构的子数组的最后元素可能作为后一子数组的初始元素
+class Solution {
+public:
+    int longestMountain(vector<int>& A) {
+        int ans = 0, i = 0;
+        while (i < A.size()) {
+            int begin = i;
+            if (i + 1 >= A.size() || A[i + 1] <= A[i]) {
+                i++;
+                continue;
+            }
+            while (i + 1 < A.size() && A[i] < A[i + 1]) {
+                i++;
+            }
+            if (i + 1 >= A.size() || A[i + 1] >= A[i]) {
+                i++;
+                continue;
+            }
+            while (i + 1 < A.size() && A[i] > A[i + 1]) {
+                i++;
+            }
+            ans = max(ans, i - begin + 1);
+        }
+        return ans;
+    }
+};

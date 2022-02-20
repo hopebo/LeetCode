@@ -1,0 +1,86 @@
+// 使用map结构来优化查找
+class ExamRoom {
+private:
+    map<int, set<int>> dist;
+    map<int, pair<int, int>> pos;
+    int N;
+
+public:
+    ExamRoom(int N) {
+        pos[-1] = pair<int, int>(-1, N);
+        pos[N] = pair<int, int>(-1, N);
+        dist[N].insert(0);
+        this->N = N;
+    }
+    
+    int seat() {
+        map<int, set<int>>::reverse_iterator it = dist.rbegin();
+        while (it->second.empty()) {
+            dist.erase(it->first);
+            it = dist.rbegin();
+        }
+        int maxDist = it->first;
+        int seatId = *(it->second.begin());
+        it->second.erase(seatId);
+        auto it1 = pos.upper_bound(seatId);
+        int right = it1->first;
+        int left = (--it1)->first;
+        pos[seatId] = pair<int, int>(left, right);
+        pos[left].second = seatId;
+        pos[right].first = seatId;
+        if (seatId - left > 1) {
+            if (left == -1) {
+                dist[seatId].insert(0);
+            } else {
+                dist[(seatId - left) / 2].insert(left + (seatId - left) / 2);
+            }
+        }
+        if (right - seatId > 1) {
+            if (right == N) {
+                dist[N - 1 - seatId].insert(N - 1);
+            } else {
+                dist[(right - seatId) / 2].insert(seatId + (right - seatId) / 2);
+            }
+        }
+        return seatId;
+    }
+    
+    void leave(int p) {
+        pair<int, int> neighbor = pos[p];
+        pos.erase(p);
+        int left = neighbor.first, right = neighbor.second;
+        pos[left].second = right;
+        pos[right].first = left;
+        int seatId = p;
+        if (seatId - left > 1) {
+            if (left == -1) {
+                dist[seatId].erase(0);
+            } else {
+                dist[(seatId - left) / 2].erase(left + (seatId - left) / 2);
+            }
+        }
+        if (right - seatId > 1) {
+            if (right == N) {
+                dist[N - 1 - seatId].erase(N - 1);
+            } else {
+                dist[(right - seatId) / 2].erase(seatId + (right - seatId) / 2);
+            }
+        }
+        if (right - left > 1) {
+            if (left == -1) {
+                dist[right].insert(0);
+            } else if (right == N) {
+                dist[N - 1 - left].insert(N - 1);
+            } else {
+                dist[(right - left) / 2].insert(left + (right - left) / 2);
+            }
+        }
+    }
+};
+
+/**
+ * Your ExamRoom object will be instantiated and called as such:
+ * ExamRoom obj = new ExamRoom(N);
+ * int param_1 = obj.seat();
+ * obj.leave(p);
+ */

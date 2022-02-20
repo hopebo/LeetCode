@@ -1,0 +1,66 @@
+// BFS的方法
+class Solution {
+public:
+    int numBusesToDestination(vector<vector<int>>& routes, int S, int T) {
+        map<int, vector<int>> bus;
+        for (int i = 0; i < routes.size(); i++)
+        {
+            for (int j = 0; j < routes[i].size(); j++)
+            {
+                bus[routes[i][j]].push_back(i);
+            }
+        }
+        queue<int> road;
+        set<int> pass_bus;
+        set<int> pass_stop;
+        road.push(S);
+        int step = 0;
+        if (S == T)
+        {
+            return step;
+        }
+        pass_stop.insert(S);
+        while (!road.empty())
+        {
+            int len = road.size();
+            step++;
+            for (int i = 0; i < len; i++)
+            {
+                int cur = road.front();
+                road.pop();
+                for (vector<int>::iterator it = bus[cur].begin(); it != bus[cur].end(); it++)
+                {
+                    int bus_num = *it;
+                    if (pass_bus.find(bus_num) != pass_bus.end())
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        for (int j = 0; j < routes[bus_num].size(); j++)
+                        {
+                            if (pass_stop.find(routes[bus_num][j]) != pass_stop.end())
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                if (routes[bus_num][j] == T)
+                                {
+                                    return step;
+                                }
+                                else
+                                {
+                                    road.push(routes[bus_num][j]);
+                                    pass_stop.insert(routes[bus_num][j]);
+                                }
+                            }
+                        }
+                        pass_bus.insert(bus_num);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+};

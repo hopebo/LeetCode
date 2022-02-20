@@ -1,0 +1,42 @@
+// 顺序排列jobs后二分查找，或者再顺序排列worker之后指针遍历
+class Solution {
+public:
+    int maxProfitAssignment(vector<int>& difficulty, vector<int>& profit, vector<int>& worker) {
+        vector<pair<int, int>> helper;
+        int len = difficulty.size();
+        for (int i = 0; i < len; i++)
+        {
+            helper.push_back(pair<int, int>(difficulty[i], profit[i]));
+        }
+        sort(helper.begin(), helper.end(), less<pair<int, int>>());
+        int maxProfit = INT_MIN;
+        for (int i = 0; i < len; i++)
+        {
+            maxProfit = max(maxProfit, helper[i].second);
+            helper[i].second = maxProfit;
+        }
+        int res = 0;
+        for (int i = 0; i < worker.size(); i++)
+        {
+            res += binarySearch(helper, worker[i]);
+        }
+        return res;
+    }
+    int binarySearch(vector<pair<int, int>>& nums, int target)
+    {
+        int low = 0, high = (int)nums.size() - 1;
+        while (low < high)
+        {
+            int mid = ceil(((double)high - low) / 2) + low;
+            if (target < nums[mid].first)
+            {
+                high = mid - 1;
+            }
+            else
+            {
+                low = mid;
+            }
+        }
+        return target >= nums[low].first ? nums[low].second : 0;
+    }
+};

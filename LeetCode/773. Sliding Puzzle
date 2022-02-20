@@ -1,0 +1,42 @@
+// DFS递归每种情况，对于移动步长减少了的位置需要重新递归。
+unordered_map<int, vector<int>> moves{{0, {1, 3}}, {1, {0, 2, 4}}, {2, {1, 5}}, {3, {0, 4}}, {4, {1, 3, 5}}, {5, {4, 2}}};
+class Solution {
+public:
+    int slidingPuzzle(vector<vector<int>>& board) {
+        string cur_str;
+        int pos;
+        for (int i = 0; i < 2; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                cur_str.push_back(board[i][j] + '0');
+                if (board[i][j] == 0)
+                {
+                    pos = i * 3 + j;
+                }
+            }
+        }
+        int min_move = INT_MAX;
+        unordered_map<string, int> prev;
+        solve(prev, 0, min_move, pos, cur_str);
+        return min_move == INT_MAX ? -1 : min_move;
+    }
+    void solve(unordered_map<string, int>& prev, int cur_move, int& min_move, int pos, string& cur_str)
+    {
+        if (cur_str == "123450")
+        {
+            min_move = min(min_move, cur_move);
+            return;
+        }
+        if (cur_move < min_move && (prev.find(cur_str) == prev.end() || cur_move < prev[cur_str]))
+        {
+            prev[cur_str] = cur_move;
+            for (int i = 0; i < moves[pos].size(); i++)
+            {
+                swap(cur_str[pos], cur_str[moves[pos][i]]);
+                solve(prev, cur_move + 1, min_move, moves[pos][i], cur_str);
+                swap(cur_str[pos], cur_str[moves[pos][i]]);
+            }
+        }
+    }
+};

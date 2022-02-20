@@ -1,0 +1,25 @@
+// 顺序遍历，记录下每个不同字母的起始位置，注意循环结束最后一个范围的判断
+class Solution {
+public:
+    vector<vector<int>> largeGroupPositions(string S) {
+        vector<vector<int>> res;
+        int start = 0;
+        int len = S.size();
+        for (int i = 0; i < len; i++)
+        {
+            if (i > 0 && S[i] != S[i - 1])
+            {
+                if (i - start >= 3)
+                {
+                    res.push_back(vector<int>{ start, i - 1 });
+                }
+                start = i;
+            }
+        }
+        if (len - start >= 3)
+        {
+            res.push_back(vector<int>{ start, len - 1 });
+        }
+        return res;
+    }
+};

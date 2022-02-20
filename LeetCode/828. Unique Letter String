@@ -1,0 +1,37 @@
+// 计算每个字符在可能的子串中的贡献
+int base = 1e9 + 7;
+class Solution {
+public:
+    int uniqueLetterString(string S) {
+        if (S.empty())
+        {
+            return 0;
+        }
+        int len = S.size();
+        vector<pair<int, int>> pos(len, pair<int, int>(-1, len));
+        map<char, int> index;
+        for (int i = 0; i < len; i++)
+        {
+            if (index.count(S[i]))
+            {
+                pos[i].first = index[S[i]];
+            }
+            index[S[i]] = i;
+        }
+        index.clear();
+        for (int i = len - 1; i >= 0; i--)
+        {
+            if (index.count(S[i]))
+            {
+                pos[i].second = index[S[i]];
+            }
+            index[S[i]] = i;
+        }
+        long long res = 0;
+        for (int i = 0; i < len; i++)
+        {
+            res = (res + (i - pos[i].first) * (pos[i].second - i)) % base;
+        }
+        return res;
+    }
+};

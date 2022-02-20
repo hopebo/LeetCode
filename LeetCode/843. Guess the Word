@@ -1,0 +1,38 @@
+// 随机猜取，排除不可能值
+/**
+ * // This is the Master's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * class Master {
+ *   public:
+ *     int guess(string word);
+ * };
+ */
+class Solution {
+public:
+    void findSecretWord(vector<string>& wordlist, Master& master) {
+        while (!wordlist.empty()) {
+            vector<string> alternatives;
+            int index = rand() % wordlist.size();
+            int match = master.guess(wordlist[index]);
+            if (match == wordlist[0].size()) {
+                return;
+            }
+            for (int i = 0; i < wordlist.size(); i++) {
+                if (match == countMatch(wordlist[i], wordlist[index])) {
+                    alternatives.push_back(wordlist[i]);
+                }
+            }
+            wordlist = alternatives;
+        }
+        return;
+    }
+    int countMatch(string& s1, string& s2) {
+        int match = 0;
+        for (int i = 0; i < s1.size(); i++) {
+            if (s1[i] == s2[i]) {
+                match++;
+            }
+        }
+        return match;
+    }
+};

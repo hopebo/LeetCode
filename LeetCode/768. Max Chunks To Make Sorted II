@@ -1,0 +1,26 @@
+// 分割区间的关键是，后面元素的最小值已经小于等于当前区间的最大值。
+class Solution {
+public:
+    int maxChunksToSorted(vector<int>& arr) {
+        int res = 0;
+        stack<int> minimum;
+        int cur_min = INT_MAX;
+        int len = arr.size();
+        for (int i = len - 1; i >= 0; i--)
+        {
+            cur_min = min(cur_min, arr[i]);
+            minimum.push(cur_min);
+        }
+        int maximum = INT_MIN;
+        for (int i = 0; i < len; i++)
+        {
+            maximum = max(maximum, arr[i]);
+            minimum.pop();
+            if (minimum.empty() || minimum.top() >= maximum)
+            {
+                res++;
+            }
+        }
+        return res;
+    }
+};

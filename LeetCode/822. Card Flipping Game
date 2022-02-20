@@ -1,0 +1,27 @@
+// 只有双面相同的数字是不可能出现的，否则取其中最小的
+class Solution {
+public:
+    int flipgame(vector<int>& fronts, vector<int>& backs) {
+        set<int> same, notsame;
+        for (int i = 0; i < fronts.size(); ++i)
+        {
+            if (fronts[i] == backs[i])
+            {
+                same.insert(fronts[i]);
+            }
+            else
+            {
+                notsame.insert(fronts[i]);
+                notsame.insert(backs[i]);
+            }
+        }
+        for (set<int>::iterator it = notsame.begin(); it != notsame.end(); it++)
+        {
+            if (same.find(*it) == same.end())
+            {
+                return *it;
+            }
+        }
+        return 0;
+    }
+};

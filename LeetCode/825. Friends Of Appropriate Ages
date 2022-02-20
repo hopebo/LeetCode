@@ -1,0 +1,38 @@
+// 顺序遍历，注意处理相同值的情况
+class Solution {
+public:
+    int numFriendRequests(vector<int>& ages) {
+        sort(ages.begin(), ages.end());
+        int res = 0;
+        int i = 0;
+        int same = 0;
+        int prev = 0;
+        for (int j = 0; j < ages.size(); j++)
+        {
+            if (j > 0 && ages[j] == ages[j - 1])
+            {
+                same++;
+                res += prev;
+            }
+            else
+            {
+                if (j > 0 && ages[j - 1] > 0.5 * ages[j - 1] + 7)
+                {
+                    res += same * (same - 1);
+                }
+                same = 1;
+                while (i < j && ages[i] <= 0.5 * ages[j] + 7)
+                {
+                    i++;
+                }
+                res += j - i;
+                prev = j - i;
+            }
+        }
+        if (ages.back() > 0 && ages.back() > 0.5 * ages.back() + 7)
+        {
+            res += same * (same - 1);
+        }
+        return res;
+    }
+};
